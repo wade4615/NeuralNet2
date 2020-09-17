@@ -3,9 +3,9 @@
     	
     <storageModule moduleId="org.eclipse.cdt.core.settings">
         		
-        <cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.debug.337953595">
+        <cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.debug.2103962527">
             			
-            <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.337953595" moduleId="org.eclipse.cdt.core.settings" name="Debug64">
+            <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.2103962527" moduleId="org.eclipse.cdt.core.settings" name="Debug64">
                 				
                 <externalSettings/>
                 				
@@ -25,55 +25,59 @@
             			
             <storageModule moduleId="cdtBuildSystem" version="4.0.0">
                 				
-                <configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.debug.337953595" name="Debug64" optionalBuildProperties="" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
+                <configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.debug.2103962527" name="Debug64" optionalBuildProperties="org.eclipse.cdt.docker.launcher.containerbuild.property.selectedvolumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.volumes=" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
                     					
-                    <folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.337953595." name="/" resourcePath="">
+                    <folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.2103962527." name="/" resourcePath="">
                         						
-                        <toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.debug.1004873877" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.debug">
+                        <toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.debug.1454694888" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.debug">
                             							
-                            <targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.141359154" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
+                            <targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.1262721011" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
                             							
-                            <builder buildPath="${workspace_loc:/nn}/Debug" id="cdt.managedbuild.tool.gnu.builder.mingw.base.1910003841" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
+                            <builder buildPath="${workspace_loc:/NN}/Debug" id="cdt.managedbuild.tool.gnu.builder.mingw.base.1411352356" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug.1692568170" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug">
+                            <tool id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug.731105167" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug">
                                 								
-                                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.1752084749" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+                                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.1651365671" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.1672628811" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
+                            <tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.348900606" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.1557104384" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug">
+                            <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.2061716171" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug">
                                 								
-                                <option id="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level.1216553862" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
+                                <option id="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level.1119164345" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
                                 								
-                                <option defaultValue="gnu.cpp.compiler.debugging.level.max" id="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level.565747793" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                <option defaultValue="gnu.cpp.compiler.debugging.level.max" id="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level.495875654" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                								
+                                <option id="gnu.cpp.compiler.option.other.other.1134593357" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -m64" valueType="string"/>
+                                								
+                                <option id="gnu.cpp.compiler.option.dialect.std.383468619" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.c++11" valueType="enumerated"/>
+                                								
+                                <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1095651881" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.547836519" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug">
+                            <tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.441889196" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug">
                                 								
-                                <option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.mingw.exe.debug.option.optimization.level.141547319" name="Optimization Level" superClass="gnu.c.compiler.mingw.exe.debug.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                <option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.mingw.exe.debug.option.optimization.level.595252986" name="Optimization Level" superClass="gnu.c.compiler.mingw.exe.debug.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
                                 								
-                                <option defaultValue="gnu.c.debugging.level.max" id="gnu.c.compiler.mingw.exe.debug.option.debugging.level.792333234" name="Debug Level" superClass="gnu.c.compiler.mingw.exe.debug.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                <option defaultValue="gnu.c.debugging.level.max" id="gnu.c.compiler.mingw.exe.debug.option.debugging.level.158179059" name="Debug Level" superClass="gnu.c.compiler.mingw.exe.debug.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
                                 								
-                                <option id="gnu.c.compiler.option.misc.other.220729002" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -m64" valueType="string"/>
+                                <option id="gnu.c.compiler.option.misc.other.1564067749" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -m64" valueType="string"/>
                                 								
-                                <option id="gnu.c.compiler.option.warnings.allwarn.259356008" name="All warnings (-Wall)" superClass="gnu.c.compiler.option.warnings.allwarn" useByScannerDiscovery="false" value="false" valueType="boolean"/>
+                                <option id="gnu.c.compiler.option.dialect.std.281134970" superClass="gnu.c.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.c.compiler.dialect.c11" valueType="enumerated"/>
                                 								
-                                <option id="gnu.c.compiler.option.warnings.nowarn.1222181256" name="Inhibit all warnings (-w)" superClass="gnu.c.compiler.option.warnings.nowarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
-                                								
-                                <option id="gnu.c.compiler.option.dialect.std.1362937761" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.c11" valueType="enumerated"/>
-                                								
-                                <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.545605225" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+                                <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.672872056" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug.2010670117" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug">
+                            <tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug.1885111004" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug"/>
+                            							
+                            <tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.178094868" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
                                 								
-                                <option id="gnu.c.link.option.ldflags.611083717" name="Linker flags" superClass="gnu.c.link.option.ldflags" useByScannerDiscovery="false" value="-static-libstdc++ -static-libgcc -static -m64" valueType="string"/>
+                                <option id="gnu.cpp.link.option.flags.254171055" name="Linker flags" superClass="gnu.cpp.link.option.flags" useByScannerDiscovery="false" value="-static-libstdc++ -static-libgcc -static -m64" valueType="string"/>
                                 								
-                                <inputType id="cdt.managedbuild.tool.gnu.c.linker.input.729545731" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
+                                <inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1547695754" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
                                     									
                                     <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
                                     									
@@ -82,8 +86,6 @@
                                 </inputType>
                                 							
                             </tool>
-                            							
-                            <tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.2026126468" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug"/>
                             						
                         </toolChain>
                         					
@@ -103,9 +105,9 @@
             		
         </cconfiguration>
         		
-        <cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.release.416525314">
+        <cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.release.366993960">
             			
-            <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.release.416525314" moduleId="org.eclipse.cdt.core.settings" name="Release64">
+            <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.release.366993960" moduleId="org.eclipse.cdt.core.settings" name="Release64">
                 				
                 <externalSettings/>
                 				
@@ -125,55 +127,59 @@
             			
             <storageModule moduleId="cdtBuildSystem" version="4.0.0">
                 				
-                <configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.release.416525314" name="Release64" optionalBuildProperties="org.eclipse.cdt.docker.launcher.containerbuild.property.selectedvolumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.volumes=" parent="cdt.managedbuild.config.gnu.mingw.exe.release">
+                <configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.release.366993960" name="Release64" optionalBuildProperties="" parent="cdt.managedbuild.config.gnu.mingw.exe.release">
                     					
-                    <folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.release.416525314." name="/" resourcePath="">
+                    <folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.release.366993960." name="/" resourcePath="">
                         						
-                        <toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.release.1216122831" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.release">
+                        <toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.release.230500446" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.release">
                             							
-                            <targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.release.1492592314" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.release"/>
+                            <targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.release.701777677" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.release"/>
                             							
-                            <builder buildPath="${workspace_loc:/nn}/Release" id="cdt.managedbuild.tool.gnu.builder.mingw.base.1685127888" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
+                            <builder buildPath="${workspace_loc:/NN}/Release" id="cdt.managedbuild.tool.gnu.builder.mingw.base.1241499527" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.release.665783820" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.release">
+                            <tool id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.release.299964761" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.release">
                                 								
-                                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.409935403" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+                                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.1012239972" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.1884907313" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
+                            <tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.1870663218" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.release.54135951" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.release">
+                            <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.release.1053315142" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.release">
                                 								
-                                <option id="gnu.cpp.compiler.mingw.exe.release.option.optimization.level.1657966320" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.release.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
+                                <option id="gnu.cpp.compiler.mingw.exe.release.option.optimization.level.1864985533" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.release.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
                                 								
-                                <option defaultValue="gnu.cpp.compiler.debugging.level.none" id="gnu.cpp.compiler.mingw.exe.release.option.debugging.level.1021721789" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.release.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                <option defaultValue="gnu.cpp.compiler.debugging.level.none" id="gnu.cpp.compiler.mingw.exe.release.option.debugging.level.2031149769" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.release.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                								
+                                <option id="gnu.cpp.compiler.option.other.other.318251934" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -fexpensive-optimizations -flto -m64" valueType="string"/>
+                                								
+                                <option id="gnu.cpp.compiler.option.dialect.std.1389761991" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.c++11" valueType="enumerated"/>
+                                								
+                                <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1282178712" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release.1928760999" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release">
+                            <tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release.1012181011" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release">
                                 								
-                                <option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.mingw.exe.release.option.optimization.level.1494872003" name="Optimization Level" superClass="gnu.c.compiler.mingw.exe.release.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                <option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.mingw.exe.release.option.optimization.level.9412596" name="Optimization Level" superClass="gnu.c.compiler.mingw.exe.release.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
                                 								
-                                <option defaultValue="gnu.c.debugging.level.none" id="gnu.c.compiler.mingw.exe.release.option.debugging.level.619829909" name="Debug Level" superClass="gnu.c.compiler.mingw.exe.release.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                <option defaultValue="gnu.c.debugging.level.none" id="gnu.c.compiler.mingw.exe.release.option.debugging.level.1631808394" name="Debug Level" superClass="gnu.c.compiler.mingw.exe.release.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
                                 								
-                                <option id="gnu.c.compiler.option.misc.other.1158014621" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -fexpensive-optimizations -flto -m64" valueType="string"/>
+                                <option id="gnu.c.compiler.option.misc.other.1613066955" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -fexpensive-optimizations -flto -m64" valueType="string"/>
                                 								
-                                <option id="gnu.c.compiler.option.warnings.allwarn.930447715" name="All warnings (-Wall)" superClass="gnu.c.compiler.option.warnings.allwarn" useByScannerDiscovery="false" value="false" valueType="boolean"/>
+                                <option id="gnu.c.compiler.option.dialect.std.2054341867" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.c11" valueType="enumerated"/>
                                 								
-                                <option id="gnu.c.compiler.option.warnings.nowarn.1656795078" name="Inhibit all warnings (-w)" superClass="gnu.c.compiler.option.warnings.nowarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
-                                								
-                                <option id="gnu.c.compiler.option.dialect.std.1678600718" superClass="gnu.c.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.c.compiler.dialect.c11" valueType="enumerated"/>
-                                								
-                                <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.108348969" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+                                <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.2014017918" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release.1560527341" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release">
+                            <tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release.248252130" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release"/>
+                            							
+                            <tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release.269383605" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release">
                                 								
-                                <option id="gnu.c.link.option.ldflags.901914538" name="Linker flags" superClass="gnu.c.link.option.ldflags" useByScannerDiscovery="false" value="-static-libstdc++ -static-libgcc -static -m64" valueType="string"/>
+                                <option id="gnu.cpp.link.option.flags.1067134729" name="Linker flags" superClass="gnu.cpp.link.option.flags" useByScannerDiscovery="false" value="-static-libstdc++ -static-libgcc -static -m64" valueType="string"/>
                                 								
-                                <inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1546432516" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
+                                <inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1358603737" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
                                     									
                                     <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
                                     									
@@ -182,8 +188,6 @@
                                 </inputType>
                                 							
                             </tool>
-                            							
-                            <tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release.98323303" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release"/>
                             						
                         </toolChain>
                         					
@@ -203,9 +207,9 @@
             		
         </cconfiguration>
         		
-        <cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.debug.337953595.1180667022">
+        <cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.debug.2103962527.242704131">
             			
-            <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.337953595.1180667022" moduleId="org.eclipse.cdt.core.settings" name="Debug32">
+            <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.2103962527.242704131" moduleId="org.eclipse.cdt.core.settings" name="Debug32">
                 				
                 <externalSettings/>
                 				
@@ -225,55 +229,59 @@
             			
             <storageModule moduleId="cdtBuildSystem" version="4.0.0">
                 				
-                <configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.debug.337953595.1180667022" name="Debug32" optionalBuildProperties="" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
+                <configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.debug.2103962527.242704131" name="Debug32" optionalBuildProperties="" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
                     					
-                    <folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.337953595.1180667022." name="/" resourcePath="">
+                    <folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.2103962527.242704131." name="/" resourcePath="">
                         						
-                        <toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.debug.1799827419" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.debug">
+                        <toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.debug.1074932968" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.debug">
                             							
-                            <targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.1729822863" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
+                            <targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.121031563" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
                             							
-                            <builder buildPath="${workspace_loc:/nn}/Debug" id="cdt.managedbuild.tool.gnu.builder.mingw.base.46006467" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
+                            <builder buildPath="${workspace_loc:/NN}/Debug" id="cdt.managedbuild.tool.gnu.builder.mingw.base.489622647" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug.533168963" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug">
+                            <tool id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug.611179851" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug">
                                 								
-                                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.947096444" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+                                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.334707634" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.2083068862" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
+                            <tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.203601867" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.1805928207" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug">
+                            <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.1299962563" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug">
                                 								
-                                <option id="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level.653589553" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
+                                <option id="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level.92258431" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
                                 								
-                                <option defaultValue="gnu.cpp.compiler.debugging.level.max" id="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level.1124063868" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                <option defaultValue="gnu.cpp.compiler.debugging.level.max" id="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level.1302178" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                								
+                                <option id="gnu.cpp.compiler.option.other.other.217367290" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -m32" valueType="string"/>
+                                								
+                                <option id="gnu.cpp.compiler.option.dialect.std.1726731451" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.c++11" valueType="enumerated"/>
+                                								
+                                <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1671730010" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.984464624" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug">
+                            <tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.217200273" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug">
                                 								
-                                <option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.mingw.exe.debug.option.optimization.level.504557726" name="Optimization Level" superClass="gnu.c.compiler.mingw.exe.debug.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                <option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.mingw.exe.debug.option.optimization.level.944169601" name="Optimization Level" superClass="gnu.c.compiler.mingw.exe.debug.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
                                 								
-                                <option defaultValue="gnu.c.debugging.level.max" id="gnu.c.compiler.mingw.exe.debug.option.debugging.level.428508155" name="Debug Level" superClass="gnu.c.compiler.mingw.exe.debug.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                <option defaultValue="gnu.c.debugging.level.max" id="gnu.c.compiler.mingw.exe.debug.option.debugging.level.1330911448" name="Debug Level" superClass="gnu.c.compiler.mingw.exe.debug.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
                                 								
-                                <option id="gnu.c.compiler.option.misc.other.291520566" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -m32" valueType="string"/>
+                                <option id="gnu.c.compiler.option.misc.other.73601342" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -m32" valueType="string"/>
                                 								
-                                <option id="gnu.c.compiler.option.warnings.allwarn.377909219" name="All warnings (-Wall)" superClass="gnu.c.compiler.option.warnings.allwarn" useByScannerDiscovery="false" value="false" valueType="boolean"/>
+                                <option id="gnu.c.compiler.option.dialect.std.1869251045" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.c11" valueType="enumerated"/>
                                 								
-                                <option id="gnu.c.compiler.option.warnings.nowarn.1631992002" name="Inhibit all warnings (-w)" superClass="gnu.c.compiler.option.warnings.nowarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
-                                								
-                                <option id="gnu.c.compiler.option.dialect.std.1179337414" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.c11" valueType="enumerated"/>
-                                								
-                                <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.313813694" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+                                <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.2100727863" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug.1583835035" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug">
+                            <tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug.2014765358" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug"/>
+                            							
+                            <tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.917887493" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
                                 								
-                                <option id="gnu.c.link.option.ldflags.225210028" name="Linker flags" superClass="gnu.c.link.option.ldflags" useByScannerDiscovery="false" value="-static-libstdc++ -static-libgcc -static -m32" valueType="string"/>
+                                <option id="gnu.cpp.link.option.flags.673520770" name="Linker flags" superClass="gnu.cpp.link.option.flags" useByScannerDiscovery="false" value="-static-libstdc++ -static-libgcc -static -m32" valueType="string"/>
                                 								
-                                <inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1119530724" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
+                                <inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1771573835" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
                                     									
                                     <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
                                     									
@@ -282,8 +290,6 @@
                                 </inputType>
                                 							
                             </tool>
-                            							
-                            <tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.1795624660" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug"/>
                             						
                         </toolChain>
                         					
@@ -303,9 +309,9 @@
             		
         </cconfiguration>
         		
-        <cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.release.416525314.1783420394">
+        <cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.release.366993960.1435402169">
             			
-            <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.release.416525314.1783420394" moduleId="org.eclipse.cdt.core.settings" name="Release32">
+            <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.release.366993960.1435402169" moduleId="org.eclipse.cdt.core.settings" name="Release32">
                 				
                 <externalSettings/>
                 				
@@ -325,55 +331,59 @@
             			
             <storageModule moduleId="cdtBuildSystem" version="4.0.0">
                 				
-                <configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.release.416525314.1783420394" name="Release32" optionalBuildProperties="org.eclipse.cdt.docker.launcher.containerbuild.property.selectedvolumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.volumes=" parent="cdt.managedbuild.config.gnu.mingw.exe.release">
+                <configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.release.366993960.1435402169" name="Release32" optionalBuildProperties="" parent="cdt.managedbuild.config.gnu.mingw.exe.release">
                     					
-                    <folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.release.416525314.1783420394." name="/" resourcePath="">
+                    <folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.release.366993960.1435402169." name="/" resourcePath="">
                         						
-                        <toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.release.532710963" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.release">
+                        <toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.release.1525982795" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.release">
                             							
-                            <targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.release.1291637882" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.release"/>
+                            <targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.release.616782221" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.release"/>
                             							
-                            <builder buildPath="${workspace_loc:/nn}/Release" id="cdt.managedbuild.tool.gnu.builder.mingw.base.97406421" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
+                            <builder buildPath="${workspace_loc:/NN}/Release" id="cdt.managedbuild.tool.gnu.builder.mingw.base.2092864134" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.release.1302203086" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.release">
+                            <tool id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.release.1775255815" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.release">
                                 								
-                                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.1533093965" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+                                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.595333890" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.1732966796" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
+                            <tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.1220842868" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.release.901616856" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.release">
+                            <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.release.2067205345" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.release">
                                 								
-                                <option id="gnu.cpp.compiler.mingw.exe.release.option.optimization.level.2142758626" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.release.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
+                                <option id="gnu.cpp.compiler.mingw.exe.release.option.optimization.level.546837478" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.release.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
                                 								
-                                <option defaultValue="gnu.cpp.compiler.debugging.level.none" id="gnu.cpp.compiler.mingw.exe.release.option.debugging.level.1819642400" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.release.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                <option defaultValue="gnu.cpp.compiler.debugging.level.none" id="gnu.cpp.compiler.mingw.exe.release.option.debugging.level.1096840706" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.release.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                								
+                                <option id="gnu.cpp.compiler.option.other.other.647416510" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -fexpensive-optimizations -flto -m32" valueType="string"/>
+                                								
+                                <option id="gnu.cpp.compiler.option.dialect.std.286965047" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.c++11" valueType="enumerated"/>
+                                								
+                                <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.458729777" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release.507111636" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release">
+                            <tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release.1823643102" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release">
                                 								
-                                <option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.mingw.exe.release.option.optimization.level.811877401" name="Optimization Level" superClass="gnu.c.compiler.mingw.exe.release.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                <option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.mingw.exe.release.option.optimization.level.398075516" name="Optimization Level" superClass="gnu.c.compiler.mingw.exe.release.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
                                 								
-                                <option defaultValue="gnu.c.debugging.level.none" id="gnu.c.compiler.mingw.exe.release.option.debugging.level.1449784312" name="Debug Level" superClass="gnu.c.compiler.mingw.exe.release.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
+                                <option defaultValue="gnu.c.debugging.level.none" id="gnu.c.compiler.mingw.exe.release.option.debugging.level.770532717" name="Debug Level" superClass="gnu.c.compiler.mingw.exe.release.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
                                 								
-                                <option id="gnu.c.compiler.option.misc.other.2022339910" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -fexpensive-optimizations -flto -m32" valueType="string"/>
+                                <option id="gnu.c.compiler.option.misc.other.148006187" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -fexpensive-optimizations -flto -m32" valueType="string"/>
                                 								
-                                <option id="gnu.c.compiler.option.warnings.allwarn.1395754578" name="All warnings (-Wall)" superClass="gnu.c.compiler.option.warnings.allwarn" useByScannerDiscovery="false" value="false" valueType="boolean"/>
+                                <option id="gnu.c.compiler.option.dialect.std.726969441" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.c11" valueType="enumerated"/>
                                 								
-                                <option id="gnu.c.compiler.option.warnings.nowarn.1754641890" name="Inhibit all warnings (-w)" superClass="gnu.c.compiler.option.warnings.nowarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
-                                								
-                                <option id="gnu.c.compiler.option.dialect.std.872661250" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.c11" valueType="enumerated"/>
-                                								
-                                <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.990694293" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+                                <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1671425562" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release.1747624915" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release">
+                            <tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release.48391404" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release"/>
+                            							
+                            <tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release.2078457335" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release">
                                 								
-                                <option id="gnu.c.link.option.ldflags.765999673" name="Linker flags" superClass="gnu.c.link.option.ldflags" useByScannerDiscovery="false" value="-static-libstdc++ -static-libgcc -static -m32" valueType="string"/>
+                                <option id="gnu.cpp.link.option.flags.932110375" name="Linker flags" superClass="gnu.cpp.link.option.flags" useByScannerDiscovery="false" value="-static-libstdc++ -static-libgcc -static -m32" valueType="string"/>
                                 								
-                                <inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1264325636" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
+                                <inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1772294697" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
                                     									
                                     <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
                                     									
@@ -382,8 +392,6 @@
                                 </inputType>
                                 							
                             </tool>
-                            							
-                            <tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release.845067966" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release"/>
                             						
                         </toolChain>
                         					
@@ -407,7 +415,7 @@
     	
     <storageModule moduleId="cdtBuildSystem" version="4.0.0">
         		
-        <project id="nn.cdt.managedbuild.target.gnu.mingw.exe.1438031313" name="Executable" projectType="cdt.managedbuild.target.gnu.mingw.exe"/>
+        <project id="NN.cdt.managedbuild.target.gnu.mingw.exe.102469323" name="Executable" projectType="cdt.managedbuild.target.gnu.mingw.exe"/>
         	
     </storageModule>
     	
@@ -415,13 +423,25 @@
         		
         <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
         		
-        <scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.release.416525314;cdt.managedbuild.config.gnu.mingw.exe.release.416525314.;cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release.1928760999;cdt.managedbuild.tool.gnu.c.compiler.input.108348969">
+        <scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.2103962527;cdt.managedbuild.config.gnu.mingw.exe.debug.2103962527.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.2061716171;cdt.managedbuild.tool.gnu.cpp.compiler.input.1095651881">
             			
             <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
             		
         </scannerConfigBuildInfo>
         		
-        <scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.337953595;cdt.managedbuild.config.gnu.mingw.exe.debug.337953595.;cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.547836519;cdt.managedbuild.tool.gnu.c.compiler.input.545605225">
+        <scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.release.366993960;cdt.managedbuild.config.gnu.mingw.exe.release.366993960.;cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release.1012181011;cdt.managedbuild.tool.gnu.c.compiler.input.2014017918">
+            			
+            <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+            		
+        </scannerConfigBuildInfo>
+        		
+        <scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.2103962527;cdt.managedbuild.config.gnu.mingw.exe.debug.2103962527.;cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.441889196;cdt.managedbuild.tool.gnu.c.compiler.input.672872056">
+            			
+            <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+            		
+        </scannerConfigBuildInfo>
+        		
+        <scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.release.366993960;cdt.managedbuild.config.gnu.mingw.exe.release.366993960.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.release.1053315142;cdt.managedbuild.tool.gnu.cpp.compiler.input.1282178712">
             			
             <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
             		
@@ -431,34 +451,8 @@
     	
     <storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
     	
-    <storageModule moduleId="refreshScope" versionNumber="2">
-        		
-        <configuration configurationName="Release64">
-            			
-            <resource resourceType="PROJECT" workspacePath="/nn"/>
-            		
-        </configuration>
-        		
-        <configuration configurationName="Debug64">
-            			
-            <resource resourceType="PROJECT" workspacePath="/nn"/>
-            		
-        </configuration>
-        		
-        <configuration configurationName="Debug">
-            			
-            <resource resourceType="PROJECT" workspacePath="/nn"/>
-            		
-        </configuration>
-        		
-        <configuration configurationName="Release">
-            			
-            <resource resourceType="PROJECT" workspacePath="/nn"/>
-            		
-        </configuration>
-        	
-    </storageModule>
-    	
     <storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+    	
+    <storageModule moduleId="refreshScope"/>
     
 </cproject>
