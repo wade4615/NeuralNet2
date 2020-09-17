@@ -24,13 +24,57 @@ int numTrainingSets = NUMBER_OF_EXAMPLES, inputSize = INPUT_LAYER_SIZE, middleSi
 double trainingInput[NUMBER_OF_EXAMPLES + 1][INPUT_LAYER_SIZE + 1] = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 }, { 0, 1, 1 } };
 double trainingOutput[NUMBER_OF_EXAMPLES + 1][OUTPUT_LAYER_SIZE + 1] = { { 0, 0 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 0 } };
 
-double inputMiddleWeights[INPUT_LAYER_SIZE + 1][HIDDEN_LAYER_SIZE + 1], middleLayer[NUMBER_OF_EXAMPLES + 1][HIDDEN_LAYER_SIZE + 1];
-double middleOutputWeights[HIDDEN_LAYER_SIZE + 1][OUTPUT_LAYER_SIZE + 1], outputLayer[NUMBER_OF_EXAMPLES + 1][OUTPUT_LAYER_SIZE + 1];
+double **inputMiddleWeights;
+double **middleLayer;
+double **middleOutputWeights;
+double **outputLayer;
 
-double outputLayerDelta[OUTPUT_LAYER_SIZE + 1], middleLayerDelta[HIDDEN_LAYER_SIZE + 1];
-double deltaWeightInputMiddle[INPUT_LAYER_SIZE + 1][HIDDEN_LAYER_SIZE + 1], deltaWeightMiddleOutput[HIDDEN_LAYER_SIZE + 1][OUTPUT_LAYER_SIZE + 1];
+double outputLayerDelta[OUTPUT_LAYER_SIZE + 1];
+double middleLayerDelta[HIDDEN_LAYER_SIZE + 1];
+double deltaWeightInputMiddle[INPUT_LAYER_SIZE + 1][HIDDEN_LAYER_SIZE + 1];
+double deltaWeightMiddleOutput[HIDDEN_LAYER_SIZE + 1][OUTPUT_LAYER_SIZE + 1];
 
 double Error, eta = 0.5, alpha = 0.9;
+
+void initializeArchitecture() {
+    trainingSetOrder = new int[NUMBER_OF_EXAMPLES];
+    inputMiddleWeights = new double*[INPUT_LAYER_SIZE + 1];
+    for (auto i = 0; i < INPUT_LAYER_SIZE + 1; i++) {
+        inputMiddleWeights[i] = new double[HIDDEN_LAYER_SIZE + 1];
+    }
+    middleLayer = new double*[NUMBER_OF_EXAMPLES + 1];
+    for (auto i = 0; i < NUMBER_OF_EXAMPLES + 1; i++) {
+        middleLayer[i] = new double[HIDDEN_LAYER_SIZE + 1];
+    }
+    middleOutputWeights = new double*[HIDDEN_LAYER_SIZE + 1];
+    for (auto i = 0; i < HIDDEN_LAYER_SIZE + 1; i++) {
+        middleOutputWeights[i] = new double[OUTPUT_LAYER_SIZE + 1];
+    }
+    outputLayer = new double*[NUMBER_OF_EXAMPLES + 1];
+    for (auto i = 0; i < NUMBER_OF_EXAMPLES + 1; i++) {
+        outputLayer[i] = new double[OUTPUT_LAYER_SIZE + 1];
+    }
+}
+
+void cleanUp() {
+    delete[] trainingSetOrder;
+    for (auto i = 0; i < INPUT_LAYER_SIZE + 1; i++) {
+        delete[] inputMiddleWeights[i];
+    }
+    delete[] inputMiddleWeights;
+    for (auto i = 0; i < NUMBER_OF_EXAMPLES + 1; i++) {
+        delete[] middleLayer[i];
+    }
+    delete[] middleLayer;
+    for (auto i = 0; i < HIDDEN_LAYER_SIZE + 1; i++) {
+        delete[] middleOutputWeights[i];
+    }
+    delete[] middleOutputWeights;
+    for (auto i = 0; i < NUMBER_OF_EXAMPLES + 1; i++) {
+        delete[] outputLayer[i];
+    }
+    delete[] outputLayer;
+}
 
 double sigmoid(double x) {
     return 1 / (1 + exp(-x));
@@ -196,13 +240,13 @@ int train(int numberOfEpochs) {
 }
 
 int main() {
-    trainingSetOrder = new int[NUMBER_OF_EXAMPLES];
+    initializeArchitecture();
     initializeInputHidden();
     initializeHiddenOutput();
     int epoch = train(1000000);
     printResults(epoch);
     printf("\n\nGoodbye!\n\n");
-    delete[] trainingSetOrder;
+    cleanUp();
     return 1;
 }
 
