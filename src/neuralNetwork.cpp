@@ -4,7 +4,18 @@
  *  Created on: Sep 17, 2020
  *      Author: wade4
  */
+#include <iostream>
+#include <initializer_list>
+#include <cstdlib>
+#include <ctime>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include <fcntl.h>
 #include "nn.h"
+#include"matrix.h"
+#include "neuralNetwork.h"
 
 NeuralNetwork::NeuralNetwork(int input, int middle, int output, int example) {
     trainingInput = NULL;
@@ -71,28 +82,9 @@ NeuralNetwork::~NeuralNetwork() {
     delete[] deltaWeightMiddleOutput;
 }
 
-void NeuralNetwork::setTrainingData(initializer_list<initializer_list<double>> in, initializer_list<initializer_list<double>> out) {
-    int size1 = (int) in.size();
-    int size2 = (int) (in.begin())->size();
-
-    trainingInput = new NetworkTypePtr[size1];
-    for (auto i = 0; i < size1; i++) {
-        trainingInput[i] = new NetworkType[size2];
-        for (auto j = 0; j < size2; j++) {
-            trainingInput[i][j] = ((in.begin() + i)->begin())[j];
-        }
-    }
-
-    int size3 = (int) out.size();
-    int size4 = (int) (out.begin())->size();
-
-    trainingOutput = new NetworkTypePtr[size3];
-    for (auto i = 0; i < size3; i++) {
-        trainingOutput[i] = new NetworkType[size4];
-        for (auto j = 0; j < size4; j++) {
-            trainingOutput[i][j] = ((out.begin() + i)->begin())[j];
-        }
-    }
+void NeuralNetwork::setTrainingData(Matrix *in, Matrix *out) {
+    trainingInput = in;
+    trainingOutput = out;
 }
 
 double NeuralNetwork::sigmoid(double x) {
@@ -103,7 +95,7 @@ double NeuralNetwork::sigmoidDerivative(double x) {
     return x * (1 - x);
 }
 
-double NeuralNetwork::fRand(double fMin, double fMax) {
+double fRand(double fMin, double fMax) {
     double f = (double) rand() / RAND_MAX;
     return fMin + f * (fMax - fMin);
 }
@@ -152,7 +144,7 @@ void NeuralNetwork::forwardInputHidden(int p) {
     for (auto j = 1; j <= middleSize; j++) {
         NetworkType activate = inputMiddleWeights[0][j];
         for (auto i = 1; i <= inputSize; i++) {
-            activate += trainingInput[p + 1][i] * inputMiddleWeights[i][j];
+            activate += (*trainingInput)[p + 1][i] * inputMiddleWeights[i][j];
         }
         middleLayer[p][j] = sigmoid(activate);
     }
@@ -172,7 +164,7 @@ void NeuralNetwork::forwardHiddenOutput(int p) {
 /* compute output unit errors */
 void NeuralNetwork::computeOutputError(int p) {
     for (auto k = 1; k <= outputSize; k++) {
-        NetworkType diff = trainingOutput[p][k] - outputLayer[p][k];
+        NetworkType diff = (*trainingOutput)[p][k] - outputLayer[p][k];
         Error += 0.5 * diff * diff; /* SSE */
         outputLayerDelta[k] = diff * sigmoidDerivative(outputLayer[p][k]); /* Sigmoidal Outputs, SSE */
     }
@@ -207,7 +199,7 @@ void NeuralNetwork::backpropagateHidden(int p) {
         deltaWeightInputMiddle[0][j] = eta * middleLayerDelta[j] + alpha * deltaWeightInputMiddle[0][j];
         inputMiddleWeights[0][j] += deltaWeightInputMiddle[0][j];
         for (auto i = 1; i <= inputSize; i++) {
-            deltaWeightInputMiddle[i][j] = eta * trainingInput[p + 1][i] * middleLayerDelta[j] + alpha * deltaWeightInputMiddle[i][j];
+            deltaWeightInputMiddle[i][j] = eta * (*trainingInput)[p + 1][i] * middleLayerDelta[j] + alpha * deltaWeightInputMiddle[i][j];
             inputMiddleWeights[i][j] += deltaWeightInputMiddle[i][j];
         }
     }
@@ -224,10 +216,10 @@ void NeuralNetwork::printResults(int epoch) {
     for (auto p = 0; p < numTrainingSets; p++) {
         printf("\n%d\t", p);
         for (auto i = 1; i <= inputSize; i++) {
-            printf("%f\t", trainingInput[p + 1][i]);
+            printf("%f\t", (*trainingInput)[p + 1][i]);
         }
         for (auto k = 1; k <= outputSize; k++) {
-            printf("%f\t%f\t", trainingOutput[p][k], outputLayer[p][k]);
+            printf("%f\t%f\t", (*trainingOutput)[p][k], outputLayer[p][k]);
         }
     }
 }

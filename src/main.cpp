@@ -7,13 +7,26 @@
  Description : A basic implementation of a back propagation neural network
  ============================================================================
  */
+#include <iostream>
+#include <initializer_list>
+#include <cstdlib>
+#include <ctime>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include <fcntl.h>
 #include "nn.h"
+#include "neuralNetwork.h"
 
 using namespace std;
 
 int main() {
-    NeuralNetwork network(INPUT_LAYER_SIZE, HIDDEN_LAYER_SIZE, OUTPUT_LAYER_SIZE, NUMBER_OF_EXAMPLES);
-    network.setTrainingData( { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 }, { 0, 1, 1 } }, { { 0, 0 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 0 } });
+    Matrix trainingInput = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 }, { 0, 1, 1 } };
+    Matrix trainingOutput = { { 0, 0 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 0 } };
+
+    NeuralNetwork network(2, 2, 1, 4);
+    network.setTrainingData(&trainingInput, &trainingOutput);
     network.initializeInputHidden();
     network.initializeHiddenOutput();
     int epoch = network.train(1000000);
