@@ -169,11 +169,7 @@ void printResults(int epoch) {
     }
 }
 
-int main() {
-    initializeInputHidden();
-    initializeHiddenOutput();
-
-    int numberOfEpochs = 1000000;
+int train(int numberOfEpochs) {
     int epoch;
     for (epoch = 0; epoch < numberOfEpochs; epoch++) { /* iterate weight updates */
         randomizeInput();
@@ -196,7 +192,13 @@ int main() {
         if (Error < 0.0004)
             break; /* stop learning when 'near enough' */
     }
+    return epoch;
+}
 
+int main() {
+    initializeInputHidden();
+    initializeHiddenOutput();
+    int epoch = train(1000000);
     printResults(epoch);
     printf("\n\nGoodbye!\n\n");
     return 1;
