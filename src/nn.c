@@ -45,6 +45,11 @@ double sigmoidDerivative(double x) {
     return x * (1 - x);
 }
 
+double fRand(double fMin, double fMax) {
+    double f = (double) rand() / RAND_MAX;
+    return fMin + f * (fMax - fMin);
+}
+
 /* initialize WeightInputHidden and DeltaWeightInputHidden */
 void initializeInputHidden() {
     for (int j = 1; j <= NumHidden; j++) {
