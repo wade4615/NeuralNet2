@@ -20,8 +20,8 @@
 
 #define rando() ((double)rand()/((double)RAND_MAX+1))
 
-int np, op, ranpat[NUMBER_OF_EXAMPLES + 1];
-int NumPattern = NUMBER_OF_EXAMPLES, NumInput = INPUT_LAYER_SIZE, NumHidden = HIDDEN_LAYER_SIZE, NumOutput = OUTPUT_LAYER_SIZE;
+int np, op, trainingSetOrder[NUMBER_OF_EXAMPLES + 1];
+int numTrainingSets = NUMBER_OF_EXAMPLES, NumInput = INPUT_LAYER_SIZE, NumHidden = HIDDEN_LAYER_SIZE, NumOutput = OUTPUT_LAYER_SIZE;
 
 double Input[NUMBER_OF_EXAMPLES + 1][INPUT_LAYER_SIZE + 1] = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 }, { 0, 1, 1 } };
 double Target[NUMBER_OF_EXAMPLES + 1][OUTPUT_LAYER_SIZE + 1] = { { 0, 0 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 0 } };
@@ -73,14 +73,14 @@ void initializeHiddenOutput() {
 
 /* randomize order of training patterns */
 void randomizeInput() {
-    for (int p = 1; p <= NumPattern; p++) {
-        ranpat[p] = p;
+    for (int p = 1; p <= numTrainingSets; p++) {
+        trainingSetOrder[p] = p;
     }
-    for (int p = 1; p <= NumPattern; p++) {
-        np = p + rando() * (NumPattern + 1 - p);
-        op = ranpat[p];
-        ranpat[p] = ranpat[np];
-        ranpat[np] = op;
+    for (int p = 1; p <= numTrainingSets; p++) {
+        np = p + rando() * (numTrainingSets + 1 - p);
+        op = trainingSetOrder[p];
+        trainingSetOrder[p] = trainingSetOrder[np];
+        trainingSetOrder[np] = op;
     }
 }
 
@@ -159,8 +159,8 @@ int main() {
     for (epoch = 0; epoch < numberOfEpochs; epoch++) { /* iterate weight updates */
         randomizeInput();
         Error = 0.0;
-        for (np = 1; np <= NumPattern; np++) { /* repeat for all the training patterns */
-            int p = ranpat[np];
+        for (np = 1; np <= numTrainingSets; np++) { /* repeat for all the training patterns */
+            int p = trainingSetOrder[np];
 
             forwardInputHidden(p);
             forwardHiddenOutput(p);
@@ -178,15 +178,14 @@ int main() {
             break; /* stop learning when 'near enough' */
     }
 
-    printf("\nEpoch %-5d :   Error = %f", epoch, Error);
-    printf("\n\nNETWORK DATA - EPOCH %d\n\nPat\t", numberOfEpochs); /* print network outputs */
+    printf("\n\nNETWORK DATA - EPOCH %d Error = %f\n\nPat\t", epoch, Error); /* print network outputs */
     for (int i = 1; i <= NumInput; i++) {
         printf("Input%-4d\t", i);
     }
     for (int k = 1; k <= NumOutput; k++) {
         printf("Target%-4d\tOutput%-4d\t", k, k);
     }
-    for (int p = 1; p <= NumPattern; p++) {
+    for (int p = 1; p <= numTrainingSets; p++) {
         printf("\n%d\t", p);
         for (int i = 1; i <= NumInput; i++) {
             printf("%f\t", Input[p][i]);
