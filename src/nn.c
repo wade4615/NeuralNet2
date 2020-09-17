@@ -35,7 +35,8 @@ double deltaOutput[OUTPUT_LAYER_SIZE + 1], deltaHidden[HIDDEN_LAYER_SIZE + 1];
 //double sumDeltaOutputWeights[HIDDEN_LAYER_SIZE+1];
 double deltaWeightInputHidden[INPUT_LAYER_SIZE + 1][HIDDEN_LAYER_SIZE + 1], deltaWeightHiddenOutput[HIDDEN_LAYER_SIZE + 1][OUTPUT_LAYER_SIZE + 1];
 
-double Error, eta = 0.5, alpha = 0.9, smallwt = 0.5;
+double Error, eta = 0.5, alpha = 0.9;
+//double smallwt = 0.5;
 
 double sigmoid(double x) {
     return 1 / (1 + exp(-x));
@@ -55,7 +56,7 @@ void initializeInputHidden() {
     for (int j = 1; j <= NumHidden; j++) {
         for (int i = 0; i <= NumInput; i++) {
             deltaWeightInputHidden[i][j] = 0.0;
-            inputHiddenWeights[i][j] = 2.0 * ( rando() - 0.5) * smallwt;
+            inputHiddenWeights[i][j] = fRand(-1.0, 1.0); //2.0 * ( rando() - 0.5) * smallwt;
         }
     }
 }
@@ -65,7 +66,7 @@ void initializeHiddenOutput() {
     for (int k = 1; k <= NumOutput; k++) {
         for (int j = 0; j <= NumHidden; j++) {
             deltaWeightHiddenOutput[j][k] = 0.0;
-            hiddenOutputWeights[j][k] = 2.0 * ( rando() - 0.5) * smallwt;
+            hiddenOutputWeights[j][k] = fRand(-1.0, 1.0); //2.0 * ( rando() - 0.5) * smallwt;
         }
     }
 }
@@ -154,7 +155,8 @@ int main() {
     initializeHiddenOutput();
 
     int numberOfEpochs = 1000000;
-    for (int epoch = 0; epoch < numberOfEpochs; epoch++) { /* iterate weight updates */
+    int epoch;
+    for (epoch = 0; epoch < numberOfEpochs; epoch++) { /* iterate weight updates */
         randomizeInput();
         Error = 0.0;
         for (np = 1; np <= NumPattern; np++) { /* repeat for all the training patterns */
@@ -169,12 +171,14 @@ int main() {
             backpropagateOutput(p);
             backpropagateHidden(p);
         }
-        if (epoch % 100000 == 0)
-            fprintf(stdout, "\nEpoch %-5d :   Error = %f", epoch, Error);
+        if (epoch % 100000 == 0) {
+            printf("\nEpoch %-5d :   Error = %f", epoch, Error);
+        }
         if (Error < 0.0004)
             break; /* stop learning when 'near enough' */
     }
 
+    printf("\nEpoch %-5d :   Error = %f", epoch, Error);
     printf("\n\nNETWORK DATA - EPOCH %d\n\nPat\t", numberOfEpochs); /* print network outputs */
     for (int i = 1; i <= NumInput; i++) {
         printf("Input%-4d\t", i);
