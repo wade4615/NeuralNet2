@@ -18,7 +18,7 @@
 #define HIDDEN_LAYER_SIZE 2
 #define OUTPUT_LAYER_SIZE 1
 
-int trainingSetOrder[NUMBER_OF_EXAMPLES];
+int *trainingSetOrder;
 int numTrainingSets = NUMBER_OF_EXAMPLES, inputSize = INPUT_LAYER_SIZE, middleSize = HIDDEN_LAYER_SIZE, outputSize = OUTPUT_LAYER_SIZE;
 
 double trainingInput[NUMBER_OF_EXAMPLES + 1][INPUT_LAYER_SIZE + 1] = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 }, { 0, 1, 1 } };
@@ -196,11 +196,13 @@ int train(int numberOfEpochs) {
 }
 
 int main() {
+    trainingSetOrder = new int[NUMBER_OF_EXAMPLES];
     initializeInputHidden();
     initializeHiddenOutput();
     int epoch = train(1000000);
     printResults(epoch);
     printf("\n\nGoodbye!\n\n");
+    delete[] trainingSetOrder;
     return 1;
 }
 
