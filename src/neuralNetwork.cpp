@@ -13,8 +13,7 @@
 #include <time.h>
 #include <math.h>
 #include <fcntl.h>
-#include "nn.h"
-#include"matrix.h"
+#include "matrix.h"
 #include "neuralNetwork.h"
 
 NeuralNetwork::NeuralNetwork(int input, int middle, int output, int example) {

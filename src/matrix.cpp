@@ -13,7 +13,6 @@
 #include <time.h>
 #include <math.h>
 #include <fcntl.h>
-#include "nn.h"
 #include "matrix.h"
 
 Matrix::Matrix(int rowSize, int colSize, double low, double high) {

@@ -8,7 +8,9 @@
 #ifndef MATRIX_H_
 #define MATRIX_H_
 
-#include "nn.h"
+typedef double NetworkType;
+typedef NetworkType *NetworkTypePtr;
+typedef NetworkTypePtr *NetworkTypePtrPtr;
 
 using namespace std;
 

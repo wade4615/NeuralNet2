@@ -16,7 +16,6 @@
 #include <time.h>
 #include <math.h>
 #include <fcntl.h>
-#include "nn.h"
 #include "neuralNetwork.h"
 
 using namespace std;
@@ -25,14 +24,17 @@ int main() {
     Matrix trainingInput = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 }, { 0, 1, 1 } };
     Matrix trainingOutput = { { 0, 0 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 0 } };
 
-    NeuralNetwork network(2, 2, 1, 4);
+    NeuralNetwork network(2, 4, 1, 4);
+
     network.setTrainingData(&trainingInput, &trainingOutput);
+
     network.initializeInputHidden();
     network.initializeHiddenOutput();
+
     int epoch = network.train(1000000);
+
     network.printResults(epoch);
+
     printf("\n\nGoodbye!\n\n");
     return 1;
 }
-
-/*******************************************************************************/

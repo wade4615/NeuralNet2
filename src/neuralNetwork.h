@@ -8,7 +8,6 @@
 #ifndef NEURALNETWORK_H_
 #define NEURALNETWORK_H_
 
-#include "nn.h"
 #include "matrix.h"
 
 using namespace std;
@@ -20,17 +19,21 @@ class NeuralNetwork {
         NetworkTypePtrPtr middleLayer;
         NetworkTypePtrPtr middleOutputWeights;
         NetworkTypePtrPtr outputLayer;
-        NetworkTypePtr outputLayerDelta;
-        NetworkTypePtr middleLayerDelta;
         NetworkTypePtrPtr deltaWeightInputMiddle;
         NetworkTypePtrPtr deltaWeightMiddleOutput;
+
+        NetworkTypePtr outputLayerDelta;
+        NetworkTypePtr middleLayerDelta;
+
         int *trainingSetOrder;
         int numTrainingSets;
         int inputSize;
         int middleSize;
         int outputSize;
+
         Matrix *trainingInput;
         Matrix *trainingOutput;
+
         NetworkType Error;
         NetworkType alpha;
         NetworkType eta;
