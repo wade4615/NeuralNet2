@@ -16,15 +16,14 @@
 #include <time.h>
 #include <math.h>
 #include <fcntl.h>
+#include "matrix.h"
 #include "neuralNetwork.h"
 
 using namespace std;
 
 int main() {
-//    Matrix trainingInput = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 }, { 0, 1, 1 } };
-//    Matrix trainingOutput = { { 0, 0 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 0 } };
-    Matrix trainingInput = { { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } };
-    Matrix trainingOutput = { { 0 }, { 1 }, { 1 }, { 0 } };
+    Matrix<double> trainingInput = { { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } };
+    Matrix<double> trainingOutput = { { 0 }, { 1 }, { 1 }, { 0 } };
 
     NeuralNetwork network(2, 4, 1, 4, 1);
 

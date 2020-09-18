@@ -56,18 +56,18 @@ NeuralNetwork::~NeuralNetwork() {
     deallocate(&deltaWeightMiddleOutput, middleBias);
 }
 
-void NeuralNetwork::setTrainingData(Matrix *in, Matrix *out) {
-    trainingInput = new Matrix(in->getRows() + 1, in->getCols() + 1, 0);
-    for (auto i = 1; i < trainingInput->getRows(); i++) {
-        for (auto j = 1; j < trainingInput->getCols(); j++) {
-            (*trainingInput)[i][j] = (*in)[i - 1][j - 1];
+void NeuralNetwork::setTrainingData(Matrix<double> *in, Matrix<double> *out) {
+    trainingInput = new Matrix<double>(in->getRows() + biasSize, in->getColumns() + biasSize, 0);
+    for (auto i = biasSize; i < trainingInput->getRows(); i++) {
+        for (auto j = biasSize; j < trainingInput->getColumns(); j++) {
+            (*trainingInput)[i][j] = (*in)[i - biasSize][j - biasSize];
         }
     }
 
-    trainingOutput = new Matrix(out->getRows() + 1, out->getCols() + 1, 0);
-    for (auto i = 1; i < trainingOutput->getRows(); i++) {
-        for (auto j = 1; j < trainingOutput->getCols(); j++) {
-            (*trainingOutput)[i][j] = (*out)[i - 1][j - 1];
+    trainingOutput = new Matrix<double>(out->getRows() + biasSize, out->getColumns() + biasSize, 0);
+    for (auto i = biasSize; i < trainingOutput->getRows(); i++) {
+        for (auto j = biasSize; j < trainingOutput->getColumns(); j++) {
+            (*trainingOutput)[i][j] = (*out)[i - biasSize][j - biasSize];
         }
     }
 }
@@ -106,9 +106,9 @@ void NeuralNetwork::randomizeInput() {
 
 /* compute hidden unit activations */
 void NeuralNetwork::forwardInputHidden(int p) {
-    for (auto j = 1; j <= middleSize; j++) {
+    for (auto j = biasSize; j < middleSize + biasSize; j++) {
         NetworkType activate = inputMiddleWeights[0][j];
-        for (auto i = 1; i <= inputSize; i++) {
+        for (auto i = biasSize; i < inputSize + biasSize; i++) {
             activate += (*trainingInput)[p + 1][i] * inputMiddleWeights[i][j];
         }
         middleLayer[p][j] = sigmoid(activate);
@@ -117,9 +117,9 @@ void NeuralNetwork::forwardInputHidden(int p) {
 
 /* compute output unit activations */
 void NeuralNetwork::forwardHiddenOutput(int p) {
-    for (auto k = 1; k <= outputSize; k++) {
+    for (auto k = biasSize; k < outputSize + biasSize; k++) {
         NetworkType activate = middleOutputWeights[0][k];
-        for (auto j = 1; j <= middleSize; j++) {
+        for (auto j = biasSize; j < middleSize + biasSize; j++) {
             activate += middleLayer[p][j] * middleOutputWeights[j][k];
         }
         outputLayer[p][k] = sigmoid(activate); /* Sigmoidal Outputs */
@@ -128,7 +128,7 @@ void NeuralNetwork::forwardHiddenOutput(int p) {
 
 /* compute output unit errors */
 void NeuralNetwork::computeOutputError(int p) {
-    for (auto k = 1; k <= outputSize; k++) {
+    for (auto k = biasSize; k < outputSize + biasSize; k++) {
         NetworkType diff = (*trainingOutput)[p][k] - outputLayer[p][k];
         Error += 0.5 * diff * diff; /* SSE */
         outputLayerDelta[k] = diff * sigmoidDerivative(outputLayer[p][k]); /* Sigmoidal Outputs, SSE */
@@ -137,7 +137,7 @@ void NeuralNetwork::computeOutputError(int p) {
 
 /* 'back-propagate' errors to hidden layer */
 void NeuralNetwork::computeHiddenError(int p) {
-    for (auto j = 1; j <= middleSize; j++) {
+    for (auto j = biasSize; j < middleSize + biasSize; j++) {
         NetworkType activate = 0.0;
         for (auto k = 1; k <= outputSize; k++) {
             activate += middleOutputWeights[j][k] * outputLayerDelta[k];
@@ -148,10 +148,10 @@ void NeuralNetwork::computeHiddenError(int p) {
 
 /* update weights hiddenOutputWeights */
 void NeuralNetwork::backpropagateOutput(int p) {
-    for (auto k = 1; k <= outputSize; k++) {
+    for (auto k = biasSize; k < outputSize + biasSize; k++) {
         deltaWeightMiddleOutput[0][k] = eta * outputLayerDelta[k] + alpha * deltaWeightMiddleOutput[0][k];
         middleOutputWeights[0][k] += deltaWeightMiddleOutput[0][k];
-        for (auto j = 1; j <= middleSize; j++) {
+        for (auto j = biasSize; j < middleSize + biasSize; j++) {
             deltaWeightMiddleOutput[j][k] = eta * middleLayer[p][j] * outputLayerDelta[k] + alpha * deltaWeightMiddleOutput[j][k];
             middleOutputWeights[j][k] += deltaWeightMiddleOutput[j][k];
         }
@@ -160,10 +160,10 @@ void NeuralNetwork::backpropagateOutput(int p) {
 
 /* update weights inputHiddenWeights */
 void NeuralNetwork::backpropagateHidden(int p) {
-    for (auto j = 1; j <= middleSize; j++) {
+    for (auto j = biasSize; j < middleSize + biasSize; j++) {
         deltaWeightInputMiddle[0][j] = eta * middleLayerDelta[j] + alpha * deltaWeightInputMiddle[0][j];
         inputMiddleWeights[0][j] += deltaWeightInputMiddle[0][j];
-        for (auto i = 1; i <= inputSize; i++) {
+        for (auto i = biasSize; i < inputSize + biasSize; i++) {
             deltaWeightInputMiddle[i][j] = eta * (*trainingInput)[p + 1][i] * middleLayerDelta[j] + alpha * deltaWeightInputMiddle[i][j];
             inputMiddleWeights[i][j] += deltaWeightInputMiddle[i][j];
         }
@@ -172,18 +172,18 @@ void NeuralNetwork::backpropagateHidden(int p) {
 
 void NeuralNetwork::printResults(int epoch) {
     printf("\n\nNETWORK DATA - EPOCH %d Error = %f\n\nPat\t", epoch, Error); /* print network outputs */
-    for (auto i = 1; i <= inputSize; i++) {
-        printf("Input%-4d\t", i);
+    for (auto i = biasSize; i < inputSize + biasSize; i++) {
+        printf("Input%-4d\t", i - biasSize + 1);
     }
-    for (auto k = 1; k <= outputSize; k++) {
-        printf("Target%-4d\tOutput%-4d\t", k, k);
+    for (auto k = biasSize; k < outputSize + biasSize; k++) {
+        printf("Target%-4d\tOutput%-4d\t", k - biasSize + 1, k - biasSize + 1);
     }
     for (auto p = 0; p < numTrainingSets; p++) {
         printf("\n%d\t", p);
-        for (auto i = 1; i <= inputSize; i++) {
+        for (auto i = biasSize; i < inputSize + biasSize; i++) {
             printf("%f\t", (*trainingInput)[p + 1][i]);
         }
-        for (auto k = 1; k <= outputSize; k++) {
+        for (auto k = biasSize; k < outputSize + biasSize; k++) {
             printf("%f\t%f\t", (*trainingOutput)[p][k], outputLayer[p][k]);
         }
     }

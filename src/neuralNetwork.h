@@ -8,9 +8,13 @@
 #ifndef NEURALNETWORK_H_
 #define NEURALNETWORK_H_
 
+using namespace std;
+
 #include "matrix.h"
 
-using namespace std;
+typedef double NetworkType;
+typedef NetworkType *NetworkTypePtr;
+typedef NetworkTypePtr *NetworkTypePtrPtr;
 
 double fRand(double fMin, double fMax);
 
@@ -37,8 +41,8 @@ class NeuralNetwork {
         int middleBias;
         int outputBias;
 
-        Matrix *trainingInput;
-        Matrix *trainingOutput;
+        Matrix<double> *trainingInput;
+        Matrix<double> *trainingOutput;
 
         NetworkType Error;
         NetworkType alpha;
@@ -58,7 +62,7 @@ class NeuralNetwork {
         void backpropagateHidden(int p);
         void printResults(int epoch);
         int train(int numberOfEpochs);
-        void setTrainingData(Matrix *in, Matrix *out);
+        void setTrainingData(Matrix<double> *in, Matrix<double> *out);
         void allocateMatrix(NetworkTypePtrPtr *matrix, int size1, int size2, double value);
         void allocateMatrix(NetworkTypePtr *matrix, int size1, double value);
         void deallocate(NetworkTypePtrPtr *matrix, int size);
