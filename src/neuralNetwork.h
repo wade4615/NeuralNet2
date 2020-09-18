@@ -30,6 +30,12 @@ class NeuralNetwork {
         int inputSize;
         int middleSize;
         int outputSize;
+        int biasSize;
+
+        int trainBias;
+        int inputBias;
+        int middleBias;
+        int outputBias;
 
         Matrix *trainingInput;
         Matrix *trainingOutput;
@@ -38,13 +44,11 @@ class NeuralNetwork {
         NetworkType alpha;
         NetworkType eta;
     public:
-        NeuralNetwork(int input, int middle, int output, int example);
+        NeuralNetwork(int input, int middle, int output, int example, int bias);
         virtual ~NeuralNetwork();
         double sigmoid(double x);
         double sigmoidDerivative(double x);
         void shuffle(int *array, int n);
-        void initializeInputHidden();
-        void initializeHiddenOutput();
         void randomizeInput();
         void forwardInputHidden(int p);
         void forwardHiddenOutput(int p);
@@ -55,6 +59,9 @@ class NeuralNetwork {
         void printResults(int epoch);
         int train(int numberOfEpochs);
         void setTrainingData(Matrix *in, Matrix *out);
+        void allocateMatrix(NetworkTypePtrPtr *matrix, int size1, int size2, double value);
+        void allocateMatrix(NetworkTypePtr *matrix, int size1, double value);
+        void deallocate(NetworkTypePtrPtr *matrix, int size);
 };
 
 #endif /* NEURALNETWORK_H_ */

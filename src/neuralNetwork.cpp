@@ -16,7 +16,7 @@
 #include "matrix.h"
 #include "neuralNetwork.h"
 
-NeuralNetwork::NeuralNetwork(int input, int middle, int output, int example) {
+NeuralNetwork::NeuralNetwork(int input, int middle, int output, int example, int bias) {
     trainingInput = NULL;
     trainingOutput = NULL;
     Error = 0.0;
@@ -26,64 +26,50 @@ NeuralNetwork::NeuralNetwork(int input, int middle, int output, int example) {
     inputSize = input;
     middleSize = middle;
     outputSize = output;
+    biasSize = bias;
+    trainBias = numTrainingSets + biasSize;
+    inputBias = inputSize + biasSize;
+    middleBias = middleSize + biasSize;
+    outputBias = outputSize + biasSize;
+
     trainingSetOrder = new int[numTrainingSets];
-    inputMiddleWeights = new NetworkTypePtr[inputSize + 1];
-    for (auto i = 0; i < inputSize + 1; i++) {
-        inputMiddleWeights[i] = new NetworkType[middleSize + 1];
-    }
-    middleLayer = new NetworkTypePtr[numTrainingSets + 1];
-    for (auto i = 0; i < numTrainingSets + 1; i++) {
-        middleLayer[i] = new NetworkType[middleSize + 1];
-    }
-    middleOutputWeights = new NetworkTypePtr[middleSize + 1];
-    for (auto i = 0; i < middleSize + 1; i++) {
-        middleOutputWeights[i] = new NetworkType[outputSize + 1];
-    }
-    outputLayer = new NetworkTypePtr[numTrainingSets + 1];
-    for (auto i = 0; i < numTrainingSets + 1; i++) {
-        outputLayer[i] = new NetworkType[outputSize + 1];
-    }
-    outputLayerDelta = new NetworkType[outputSize + 1];
-    middleLayerDelta = new NetworkType[middleSize + 1];
-    deltaWeightInputMiddle = new NetworkTypePtr[inputSize + 1];
-    for (auto i = 0; i < inputSize + 1; i++) {
-        deltaWeightInputMiddle[i] = new NetworkType[middleSize + 1];
-    }
-    deltaWeightMiddleOutput = new NetworkTypePtr[middleSize + 1];
-    for (auto i = 0; i < middleSize + 1; i++) {
-        deltaWeightMiddleOutput[i] = new NetworkType[outputSize + 1];
-    }
+
+    allocateMatrix(&inputMiddleWeights, inputBias, middleBias, fRand(-1.0, 1.0));
+    allocateMatrix(&middleLayer, trainBias, middleBias, 0.0);
+    allocateMatrix(&middleOutputWeights, middleBias, outputBias, fRand(-1.0, 1.0));
+    allocateMatrix(&outputLayer, trainBias, outputBias, 0.0);
+    allocateMatrix(&outputLayerDelta, outputBias, 0.0);
+    allocateMatrix(&middleLayerDelta, middleBias, 0.0);
+    allocateMatrix(&deltaWeightInputMiddle, inputBias, middleBias, 0.0);
+    allocateMatrix(&deltaWeightMiddleOutput, middleBias, outputBias, 0.0);
 }
 
 NeuralNetwork::~NeuralNetwork() {
     delete[] trainingSetOrder;
-    for (auto i = 0; i < inputSize + 1; i++) {
-        delete[] inputMiddleWeights[i];
-    }
-    delete[] inputMiddleWeights;
-    for (auto i = 0; i < numTrainingSets + 1; i++) {
-        delete[] middleLayer[i];
-    }
-    delete[] middleLayer;
-    for (auto i = 0; i < middleSize + 1; i++) {
-        delete[] middleOutputWeights[i];
-    }
-    delete[] middleOutputWeights;
-    for (auto i = 0; i < numTrainingSets + 1; i++) {
-        delete[] outputLayer[i];
-    }
-    delete[] outputLayer;
+
+    deallocate(&inputMiddleWeights, inputBias);
+    deallocate(&middleLayer, trainBias);
+    deallocate(&middleOutputWeights, middleBias);
+    deallocate(&outputLayer, trainBias);
     delete[] outputLayerDelta;
     delete[] middleLayerDelta;
-    for (auto i = 0; i < middleSize + 1; i++) {
-        delete[] deltaWeightMiddleOutput[i];
-    }
-    delete[] deltaWeightMiddleOutput;
+    deallocate(&deltaWeightMiddleOutput, middleBias);
 }
 
 void NeuralNetwork::setTrainingData(Matrix *in, Matrix *out) {
-    trainingInput = in;
-    trainingOutput = out;
+    trainingInput = new Matrix(in->getRows() + 1, in->getCols() + 1, 0);
+    for (auto i = 1; i < trainingInput->getRows(); i++) {
+        for (auto j = 1; j < trainingInput->getCols(); j++) {
+            (*trainingInput)[i][j] = (*in)[i - 1][j - 1];
+        }
+    }
+
+    trainingOutput = new Matrix(out->getRows() + 1, out->getCols() + 1, 0);
+    for (auto i = 1; i < trainingOutput->getRows(); i++) {
+        for (auto j = 1; j < trainingOutput->getCols(); j++) {
+            (*trainingOutput)[i][j] = (*out)[i - 1][j - 1];
+        }
+    }
 }
 
 double NeuralNetwork::sigmoid(double x) {
@@ -106,26 +92,6 @@ void NeuralNetwork::shuffle(int *array, int n) {
             int t = array[j];
             array[j] = array[i];
             array[i] = t;
-        }
-    }
-}
-
-/* initialize WeightInputHidden and DeltaWeightInputHidden */
-void NeuralNetwork::initializeInputHidden() {
-    for (auto j = 1; j <= middleSize; j++) {
-        for (auto i = 0; i <= inputSize; i++) {
-            deltaWeightInputMiddle[i][j] = 0.0;
-            inputMiddleWeights[i][j] = fRand(-1.0, 1.0);
-        }
-    }
-}
-
-/* initialize hiddenOutputWeights and DeltaWeightHiddenOutput */
-void NeuralNetwork::initializeHiddenOutput() {
-    for (auto k = 1; k <= outputSize; k++) {
-        for (auto j = 0; j <= middleSize; j++) {
-            deltaWeightMiddleOutput[j][k] = 0.0;
-            middleOutputWeights[j][k] = fRand(-1.0, 1.0);
         }
     }
 }
@@ -249,3 +215,27 @@ int NeuralNetwork::train(int numberOfEpochs) {
     return epoch;
 }
 
+void NeuralNetwork::allocateMatrix(NetworkTypePtrPtr *matrix, int size1, int size2, double value) {
+    (*matrix) = new NetworkTypePtr[size1];
+    for (auto i = 0; i < size1; i++) {
+        (*matrix)[i] = new NetworkType[size2];
+        for (auto j = 0; j < size2; j++) {
+            (*matrix)[i][j] = value;
+        }
+    }
+}
+
+void NeuralNetwork::allocateMatrix(NetworkTypePtr *matrix, int size1, double value) {
+    (*matrix) = new NetworkType[size1];
+    for (auto j = 0; j < size1; j++) {
+        (*matrix)[j] = value;
+    }
+}
+
+void NeuralNetwork::deallocate(NetworkTypePtrPtr *matrix, int size) {
+    for (auto i = 0; i < size; i++) {
+        delete[] (*matrix)[i];
+    }
+    delete[] (*matrix);
+    (*matrix) = NULL;
+}
