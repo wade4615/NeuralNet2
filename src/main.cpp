@@ -25,7 +25,7 @@ int main() {
     Matrix<double> trainingInput = { { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } };
     Matrix<double> trainingOutput = { { 0 }, { 1 }, { 1 }, { 0 } };
 
-    NeuralNetwork network(2, 4, 1, 4, 1);
+    NeuralNetwork<double> network(2, 4, 1, 4, 1);
 
     network.setTrainingData(&trainingInput, &trainingOutput);
 
