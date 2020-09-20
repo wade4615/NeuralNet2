@@ -80,10 +80,11 @@ class NeuralNetwork {
             allocateMatrix(&middleLayer, trainBias, middleBias, 0.0);
             allocateMatrix(&middleOutputWeights, middleBias, outputBias, fRand(-1.0, 1.0));
             allocateMatrix(&outputLayer, trainBias, outputBias, 0.0);
-            allocateMatrix(&outputLayerDelta, outputBias, 0.0);
-            allocateMatrix(&middleLayerDelta, middleBias, 0.0);
             allocateMatrix(&deltaWeightInputMiddle, inputBias, middleBias, 0.0);
             allocateMatrix(&deltaWeightMiddleOutput, middleBias, outputBias, 0.0);
+
+            allocateMatrix(&outputLayerDelta, outputBias, 0.0);
+            allocateMatrix(&middleLayerDelta, middleBias, 0.0);
         }
 
         virtual ~NeuralNetwork() {
