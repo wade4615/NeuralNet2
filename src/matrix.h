@@ -23,12 +23,12 @@ using namespace std;
 double fRand(double fMin, double fMax);
 
 template<class T>
-class Matrix {
+class NeuralMatrix {
         int m_rowSize;
         int m_colSize;
         T **elements;
     public:
-        Matrix(int rowSize, int colSize, double low, double high) {
+        NeuralMatrix(int rowSize, int colSize, double low, double high) {
             m_rowSize = rowSize;
             m_colSize = colSize;
             elements = new T*[rowSize];
@@ -40,7 +40,7 @@ class Matrix {
             }
         }
 
-        Matrix(int rowSize, int colSize, double value) {
+        NeuralMatrix(int rowSize, int colSize, double value) {
             m_rowSize = rowSize;
             m_colSize = colSize;
             elements = new T*[rowSize];
@@ -52,7 +52,7 @@ class Matrix {
             }
         }
 
-        Matrix(initializer_list<initializer_list<double>> list) {
+        NeuralMatrix(initializer_list<initializer_list<double>> list) {
             m_rowSize = (int) list.size();
             m_colSize = (int) (list.begin())->size();
             elements = new T*[m_rowSize];
@@ -64,7 +64,7 @@ class Matrix {
             }
         }
 
-        virtual ~Matrix() {
+        virtual ~NeuralMatrix() {
             for (auto i = 0; i < m_rowSize + 1; i++) {
                 delete[] elements[i];
             }

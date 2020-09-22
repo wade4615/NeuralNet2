@@ -7,6 +7,7 @@
  Description : A basic implementation of a back propagation neural network
  ============================================================================
  */
+using namespace std;
 #include <iostream>
 #include <initializer_list>
 #include <cstdlib>
@@ -16,41 +17,101 @@
 #include <time.h>
 #include <math.h>
 #include <fcntl.h>
+#include "matrix.h"
 #include "main.h"
-using namespace std;
+
+NetworkTypePtrPtr inputMiddleWeights;
+NetworkTypePtrPtr middleLayer;
+NetworkTypePtrPtr middleOutputWeights;
+NetworkTypePtrPtr outputLayer;
+NetworkTypePtrPtr deltaWeightInputMiddle;
+NetworkTypePtrPtr deltaWeightMiddleOutput;
+
+NetworkTypePtr outputLayerDelta;
+NetworkTypePtr middleLayerDelta;
+
+int *trainingSetOrder;
+int numTrainingSets;
+int inputSize;
+int middleSize;
+int outputSize;
+int biasSize;
+
+int trainBias;
+int inputBias;
+int middleBias;
+int outputBias;
+
+NeuralMatrix<double> *trainingInput;
+NeuralMatrix<double> *trainingOutput;
 
 NetworkType Error;
+NetworkType alpha;
+NetworkType eta;
 
-int* randomizeInput(int numTrainingSets) {
-    int *trainingSetOrder = new int[numTrainingSets];
-    for (auto p = 0; p < numTrainingSets; p++) {
-        trainingSetOrder[p] = p;
-    }
-    shuffle(trainingSetOrder, numTrainingSets);
-    return trainingSetOrder;
+void initialize(int input, int middle, int output, int example, int bias) {
+    trainingInput = NULL;
+    trainingOutput = NULL;
+    Error = 0.0;
+    eta = 0.5;
+    alpha = 0.9;
+    numTrainingSets = example;
+    inputSize = input;
+    middleSize = middle;
+    outputSize = output;
+    biasSize = bias;
+    trainBias = numTrainingSets + biasSize;
+    inputBias = inputSize + biasSize;
+    middleBias = middleSize + biasSize;
+    outputBias = outputSize + biasSize;
+
+    trainingSetOrder = new int[numTrainingSets];
+
+    allocateMatrix(&inputMiddleWeights, inputBias, middleBias, fRand(-1.0, 1.0));
+    allocateMatrix(&middleLayer, trainBias, middleBias, 0.0);
+    allocateMatrix(&middleOutputWeights, middleBias, outputBias, fRand(-1.0, 1.0));
+    allocateMatrix(&outputLayer, trainBias, outputBias, 0.0);
+    allocateMatrix(&deltaWeightInputMiddle, inputBias, middleBias, 0.0);
+    allocateMatrix(&deltaWeightMiddleOutput, middleBias, outputBias, 0.0);
+
+    allocateMatrix(&outputLayerDelta, outputBias, 0.0);
+    allocateMatrix(&middleLayerDelta, middleBias, 0.0);
 }
 
-void print(const char *text, Network *network) {
-    for (auto i = 0; i < network->numberOfLayers; i++) {
-        printf("%s for layer %d\n", text, i);
-        for (auto k = 0; k < network->layers[i].rows; k++) {
-            for (auto l = 0; l < network->layers[i].cols; l++) {
-                printf("%1.4f ", network->layers[i].elements[k][l]);
-            }
-            printf("\n");
+void shutDown() {
+    delete[] trainingSetOrder;
+
+    deallocate(&inputMiddleWeights, inputBias);
+    deallocate(&middleLayer, trainBias);
+    deallocate(&middleOutputWeights, middleBias);
+    deallocate(&outputLayer, trainBias);
+    delete[] outputLayerDelta;
+    delete[] middleLayerDelta;
+    deallocate(&deltaWeightMiddleOutput, middleBias);
+}
+
+void setTrainingData(NeuralMatrix<double> *in, NeuralMatrix<double> *out) {
+    trainingInput = new NeuralMatrix<double>(in->getRows() + biasSize, in->getColumns() + biasSize, 0);
+    for (auto i = biasSize; i < trainingInput->getRows(); i++) {
+        for (auto j = biasSize; j < trainingInput->getColumns(); j++) {
+            (*trainingInput)[i][j] = (*in)[i - biasSize][j - biasSize];
         }
     }
-//    printf("\n");
-//    for (auto i = 0; i < network->numberOfWeightMatrices; i++) {
-//        printf("%s for weight %d\n", text, i);
-//        for (auto k = 0; k < network->weights[i].rows; k++) {
-//            for (auto l = 0; l < network->weights[i].cols; l++) {
-//                printf("%1.4f ", network->weights[i].elements[k][l]);
-//            }
-//            printf("\n");
-//        }
-//        printf("\n");
-//    }
+
+    trainingOutput = new NeuralMatrix<double>(out->getRows() + biasSize, out->getColumns() + biasSize, 0);
+    for (auto i = biasSize; i < trainingOutput->getRows(); i++) {
+        for (auto j = biasSize; j < trainingOutput->getColumns(); j++) {
+            (*trainingOutput)[i][j] = (*out)[i - biasSize][j - biasSize];
+        }
+    }
+}
+
+double sigmoid(double x) {
+    return 1 / (1 + exp(-x));
+}
+
+double sigmoidDerivative(double x) {
+    return x * (1 - x);
 }
 
 void shuffle(int *array, int n) {
@@ -64,125 +125,148 @@ void shuffle(int *array, int n) {
     }
 }
 
-void allocateMatrix(NeuralMatrix *matrix, int size1, int size2, double value) {
-    matrix->elements = new NetworkTypePtr[size1];
-    matrix->rows = size1;
-    for (auto i = 0; i < size1; i++) {
-        matrix->elements[i] = new NetworkType[size2];
-        matrix->cols = size2;
-        for (auto j = 0; j < size2; j++) {
-            matrix->elements[i][j] = value;
+void randomizeInput() {
+    for (auto p = 0; p < numTrainingSets; p++) {
+        trainingSetOrder[p] = p;
+    }
+    shuffle(trainingSetOrder, numTrainingSets);
+}
+
+void forwardInputHidden(int p) {
+    for (auto j = biasSize; j < middleSize + biasSize; j++) {
+        NetworkType activate = inputMiddleWeights[0][j];
+        for (auto i = biasSize; i < inputSize + biasSize; i++) {
+            activate += (*trainingInput)[p + 1][i] * inputMiddleWeights[i][j];
+        }
+        middleLayer[p][j] = sigmoid(activate);
+    }
+}
+
+void forwardHiddenOutput(int p) {
+    for (auto k = biasSize; k < outputSize + biasSize; k++) {
+        NetworkType activate = middleOutputWeights[0][k];
+        for (auto j = biasSize; j < middleSize + biasSize; j++) {
+            activate += middleLayer[p][j] * middleOutputWeights[j][k];
+        }
+        outputLayer[p][k] = sigmoid(activate);
+    }
+}
+
+void computeOutputError(int p) {
+    for (auto k = biasSize; k < outputSize + biasSize; k++) {
+        NetworkType diff = (*trainingOutput)[p][k] - outputLayer[p][k];
+        Error += 0.5 * diff * diff;
+        outputLayerDelta[k] = diff * sigmoidDerivative(outputLayer[p][k]);
+    }
+}
+
+void computeHiddenError(int p) {
+    for (auto j = biasSize; j < middleSize + biasSize; j++) {
+        NetworkType activate = 0.0;
+        for (auto k = 1; k <= outputSize; k++) {
+            activate += middleOutputWeights[j][k] * outputLayerDelta[k];
+        }
+        middleLayerDelta[j] = activate * sigmoidDerivative(middleLayer[p][j]); //hidden[p][j] * (1.0 - hidden[p][j]) ;
+    }
+}
+
+void backpropagateOutput(int p) {
+    for (auto k = biasSize; k < outputSize + biasSize; k++) {
+        deltaWeightMiddleOutput[0][k] = eta * outputLayerDelta[k] + alpha * deltaWeightMiddleOutput[0][k];
+        middleOutputWeights[0][k] += deltaWeightMiddleOutput[0][k];
+        for (auto j = biasSize; j < middleSize + biasSize; j++) {
+            deltaWeightMiddleOutput[j][k] = eta * middleLayer[p][j] * outputLayerDelta[k] + alpha * deltaWeightMiddleOutput[j][k];
+            middleOutputWeights[j][k] += deltaWeightMiddleOutput[j][k];
         }
     }
 }
 
-void allocateMatrix(NetworkTypePtrPtr *matrix, int size1, int size2) {
+void backpropagateHidden(int p) {
+    for (auto j = biasSize; j < middleSize + biasSize; j++) {
+        deltaWeightInputMiddle[0][j] = eta * middleLayerDelta[j] + alpha * deltaWeightInputMiddle[0][j];
+        inputMiddleWeights[0][j] += deltaWeightInputMiddle[0][j];
+        for (auto i = biasSize; i < inputSize + biasSize; i++) {
+            deltaWeightInputMiddle[i][j] = eta * (*trainingInput)[p + 1][i] * middleLayerDelta[j] + alpha * deltaWeightInputMiddle[i][j];
+            inputMiddleWeights[i][j] += deltaWeightInputMiddle[i][j];
+        }
+    }
+}
+void printResults(int epoch) {
+    printf("\n\nNETWORK DATA - EPOCH %d Error = %f\n\nPat\t", epoch, Error); /* print network outputs */
+    for (auto i = biasSize; i < inputSize + biasSize; i++) {
+        printf("Input%-4d\t", i - biasSize + 1);
+    }
+    for (auto k = biasSize; k < outputSize + biasSize; k++) {
+        printf("Target%-4d\tOutput%-4d\t", k - biasSize + 1, k - biasSize + 1);
+    }
+    for (auto p = 0; p < numTrainingSets; p++) {
+        printf("\n%d\t", p);
+        for (auto i = biasSize; i < inputSize + biasSize; i++) {
+            printf("%f\t", (*trainingInput)[p + 1][i]);
+        }
+        for (auto k = biasSize; k < outputSize + biasSize; k++) {
+            printf("%f\t%f\t", (*trainingOutput)[p][k], outputLayer[p][k]);
+        }
+    }
+}
+
+int train(int numberOfEpochs) {
+    int epoch;
+    for (epoch = 0; epoch < numberOfEpochs; epoch++) { /* iterate weight updates */
+        randomizeInput();
+        Error = 0.0;
+        for (int np = 0; np < numTrainingSets; np++) { /* repeat for all the training patterns */
+            int p = trainingSetOrder[np];
+            forwardInputHidden(p);
+            forwardHiddenOutput(p);
+            computeOutputError(p);
+            computeHiddenError(p);
+            backpropagateOutput(p);
+            backpropagateHidden(p);
+        }
+        if (epoch % 100 == 0) {
+            printf("\nEpoch %-5d :   Error = %f", epoch, Error);
+        }
+        if (Error < 0.0004)
+            break;
+    }
+    return epoch;
+}
+
+void allocateMatrix(NetworkTypePtrPtr *matrix, int size1, int size2, double value) {
     (*matrix) = new NetworkTypePtr[size1];
     for (auto i = 0; i < size1; i++) {
         (*matrix)[i] = new NetworkType[size2];
+        for (auto j = 0; j < size2; j++) {
+            (*matrix)[i][j] = value;
+        }
     }
 }
 
-void setupArchitecture(int numTrainingSets, int configuration[], Network *network) {
-    printf("network.Layers=%d\n", network->numberOfLayers);
-    printf("network.numberOfWeightMatrices=%d\n", network->numberOfWeightMatrices);
-
-    network->layers = new NeuralMatrix[network->numberOfLayers];
-    network->weights = new NeuralMatrix[network->numberOfWeightMatrices];
-
-    int configIndex = 0;
-    for (auto i = 0; i < network->numberOfLayers; i++) {
-        int numberOfNeurons = configuration[configIndex];
-        allocateMatrix(&network->layers[i], numTrainingSets, numberOfNeurons, 1.0);
-        printf("layer[%d] rows %d cols %d\n", i, network->layers[i].rows, network->layers[i].cols);
-        configIndex++;
-    }
-    for (auto i = 0; i < network->numberOfWeightMatrices; i++) {
-        allocateMatrix(&network->weights[i], network->layers[i].cols, network->layers[i + 1].cols, 1.0);
-        printf("weights[%d] rows %d cols %d\n", i, network->weights[i].rows, network->weights[i].cols);
-    }
-    network->outputLayerDelta = new NetworkType[network->numberOfLayers - 1];
-    for (auto i = 0; i < network->numberOfLayers; i++) {
-        network->outputLayerDelta[i] = 0.0;
-        printf("output delta[%d]= %1.4f\n", i, network->outputLayerDelta[i]);
-    }
-    print("before", network);
-}
-
-double sigmoid(double x) {
-    return 1 / (1 + exp(-x));
-}
-
-double sigmoidDerivative(double x) {
-    return x * (1 - x);
-}
-
-void train(int configuration[], Network *network, int numTrainingSets, NetworkTypePtrPtr input, NetworkTypePtrPtr output) {
-    for (auto np = 0; np < numTrainingSets; np++) {
-        //determine which traing set is going through this time
-        int p = network->trainingSetOrder[np];
-        //assign  training info to input layer
-        for (auto i = 0; i < configuration[0]; i++) {
-            network->layers[0].elements[p][i] = input[p][i];
-        }
-        // feed forward through entire net
-        for (auto i = 0; i < network->numberOfWeightMatrices; i++) {
-            for (auto j = 0; j < network->layers[i + 1].rows; j++) {
-                NetworkType activate = 0;
-                for (auto k = 0; k < network->layers[i].cols; k++) {
-                    activate += network->layers[i].elements[p][k] * network->weights[i].elements[k][j];
-                }
-                network->layers[i + 1].elements[p][j] = sigmoid(activate);
-            }
-        }
-        printf("Output Layer Delta for example %d\n", np);
-        for (auto k = 0; k < configuration[network->numberOfLayers - 1]; k++) {
-            NetworkType diff = output[p][k] - network->layers[network->numberOfLayers - 1].elements[p][k];
-            Error += 0.5 * diff * diff; /* SSE */
-            network->outputLayerDelta[k] = diff * sigmoidDerivative(network->layers[network->numberOfLayers - 1].elements[p][k]);
-            printf("%1.4f ", network->outputLayerDelta[k]);
-        }
-        printf("\n");
+void allocateMatrix(NetworkTypePtr *matrix, int size1, double value) {
+    (*matrix) = new NetworkType[size1];
+    for (auto j = 0; j < size1; j++) {
+        (*matrix)[j] = value;
     }
 }
 
-void test2() {
-    int configuration[] = { 2, 2, 1 };
-    int numTrainingSets = 4;
-    NetworkType input[4][2] = { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } };
-    NetworkType output[4][1] = { { 0 }, { 1 }, { 1 }, { 0 } };
-
-    Network network;
-    network.numberOfLayers = sizeof(configuration) / sizeof(int);
-    if (network.numberOfLayers < 3) {
-        printf("not enough layers in configuration");
-        exit(-1);
+void deallocate(NetworkTypePtrPtr *matrix, int size) {
+    for (auto i = 0; i < size; i++) {
+        delete[] (*matrix)[i];
     }
-
-    NetworkTypePtrPtr in;
-    NetworkTypePtrPtr out;
-    allocateMatrix(&in, numTrainingSets, configuration[0]);
-    allocateMatrix(&out, numTrainingSets, configuration[network.numberOfLayers - 1]);
-    for (auto i = 0; i < numTrainingSets; i++) {
-        for (auto j = 0; j < configuration[0]; j++) {
-            in[i][j] = input[i][j];
-        }
-    }
-    for (auto i = 0; i < numTrainingSets; i++) {
-        for (auto j = 0; j < configuration[network.numberOfLayers - 1]; j++) {
-            out[i][j] = output[i][j];
-        }
-    }
-    network.trainingSetOrder = randomizeInput(numTrainingSets);
-
-    network.numberOfWeightMatrices = network.numberOfLayers - 1;
-    setupArchitecture(numTrainingSets, configuration, &network);
-    train(configuration, &network, numTrainingSets, in, out);
-    print("after", &network);
+    delete[] (*matrix);
+    (*matrix) = NULL;
 }
 
 int main() {
-    test2();
+    NeuralMatrix<double> trainingInput = { { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } };
+    NeuralMatrix<double> trainingOutput = { { 0 }, { 1 }, { 1 }, { 0 } };
+
+    initialize(2, 2, 1, 4, 1);
+    setTrainingData(&trainingInput, &trainingOutput);
+    int epoch = train(1000000);
+    printResults(epoch);
+    shutDown();
     printf("\n\nGoodbye!\n\n");
     return 1;
 }
