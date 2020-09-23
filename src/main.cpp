@@ -28,10 +28,8 @@ Array outputLayerDelta;
 Array middleLayerDelta;
 
 int *trainingSetOrder;
+int *configuration;
 int numTrainingSets;
-int inputSize;
-int middleSize;
-int outputSize;
 int biasSize;
 
 int trainBias;
@@ -49,21 +47,24 @@ NetworkType eta;
 MatrixPtr layer;
 MatrixPtr weights;
 
-void initialize(int configuration[], int example, int bias) {
+void initialize(int config[], int example, int bias) {
     trainingInput = NULL;
     trainingOutput = NULL;
     Error1 = 0.0;
     eta = 0.5;
     alpha = 0.9;
     numTrainingSets = example;
-    inputSize = configuration[0];
-    middleSize = configuration[1];
-    outputSize = configuration[2];
+
+    configuration = new int[numberOfLayers];
+    configuration[0] = config[0];
+    configuration[1] = config[1];
+    configuration[2] = config[2];
+
     biasSize = bias;
     trainBias = numTrainingSets + biasSize;
-    inputBias = inputSize + biasSize;
-    middleBias = middleSize + biasSize;
-    outputBias = outputSize + biasSize;
+    inputBias = configuration[0] + biasSize;
+    middleBias = configuration[1] + biasSize;
+    outputBias = configuration[2] + biasSize;
 
     trainingSetOrder = new int[numTrainingSets];
 
@@ -140,16 +141,16 @@ void randomizeInput() {
 }
 
 void forward(int p) {
-    for (auto j = biasSize; j < middleSize + biasSize; j++) {
+    for (auto j = biasSize; j < configuration[1] + biasSize; j++) {
         NetworkType activate = weights[0].elements[0][j];
-        for (auto i = biasSize; i < inputSize + biasSize; i++) {
+        for (auto i = biasSize; i < configuration[0] + biasSize; i++) {
             activate += layer[0].elements[p + 1][i] * weights[0].elements[i][j];
         }
         layer[1].elements[p][j] = sigmoid(activate);
     }
-    for (auto k = biasSize; k < outputSize + biasSize; k++) {
+    for (auto k = biasSize; k < configuration[2] + biasSize; k++) {
         NetworkType activate = weights[1].elements[0][k];
-        for (auto j = biasSize; j < middleSize + biasSize; j++) {
+        for (auto j = biasSize; j < configuration[1] + biasSize; j++) {
             activate += layer[1].elements[p][j] * weights[1].elements[j][k];
         }
         layer[2].elements[p][k] = sigmoid(activate);
@@ -157,14 +158,14 @@ void forward(int p) {
 }
 
 void computeError(int p) {
-    for (auto k = biasSize; k < outputSize + biasSize; k++) {
+    for (auto k = biasSize; k < configuration[2] + biasSize; k++) {
         NetworkType diff = (*trainingOutput)[p][k] - layer[2].elements[p][k];
         Error1 += 0.5 * diff * diff;
         outputLayerDelta.elements[k] = diff * sigmoidDerivative(layer[2].elements[p][k]);
     }
-    for (auto j = biasSize; j < middleSize + biasSize; j++) {
+    for (auto j = biasSize; j < configuration[1] + biasSize; j++) {
         NetworkType activate = 0.0;
-        for (auto k = 1; k <= outputSize; k++) {
+        for (auto k = 1; k <= configuration[2]; k++) {
             activate += weights[1].elements[j][k] * outputLayerDelta.elements[k];
         }
         middleLayerDelta.elements[j] = activate * sigmoidDerivative(layer[1].elements[p][j]);
@@ -172,18 +173,18 @@ void computeError(int p) {
 }
 
 void backpropagate(int p) {
-    for (auto k = biasSize; k < outputSize + biasSize; k++) {
+    for (auto k = biasSize; k < configuration[2] + biasSize; k++) {
         deltaWeightMiddleOutput.elements[0][k] = eta * outputLayerDelta.elements[k] + alpha * deltaWeightMiddleOutput.elements[0][k];
         weights[1].elements[0][k] += deltaWeightMiddleOutput.elements[0][k];
-        for (auto j = biasSize; j < middleSize + biasSize; j++) {
+        for (auto j = biasSize; j < configuration[1] + biasSize; j++) {
             deltaWeightMiddleOutput.elements[j][k] = eta * layer[1].elements[p][j] * outputLayerDelta.elements[k] + alpha * deltaWeightMiddleOutput.elements[j][k];
             weights[1].elements[j][k] += deltaWeightMiddleOutput.elements[j][k];
         }
     }
-    for (auto j = biasSize; j < middleSize + biasSize; j++) {
+    for (auto j = biasSize; j < configuration[1] + biasSize; j++) {
         deltaWeightInputMiddle.elements[0][j] = eta * middleLayerDelta.elements[j] + alpha * deltaWeightInputMiddle.elements[0][j];
         weights[0].elements[0][j] += deltaWeightInputMiddle.elements[0][j];
-        for (auto i = biasSize; i < inputSize + biasSize; i++) {
+        for (auto i = biasSize; i < configuration[0] + biasSize; i++) {
             deltaWeightInputMiddle.elements[i][j] = eta * layer[0].elements[p + 1][i] * middleLayerDelta.elements[j] + alpha * deltaWeightInputMiddle.elements[i][j];
             weights[0].elements[i][j] += deltaWeightInputMiddle.elements[i][j];
         }
@@ -191,18 +192,18 @@ void backpropagate(int p) {
 }
 void printResults(int epoch) {
     printf("\n\nNETWORK DATA - EPOCH %d Error = %f\n\nPat\t", epoch, Error1); /* print network outputs */
-    for (auto i = biasSize; i < inputSize + biasSize; i++) {
+    for (auto i = biasSize; i < configuration[0] + biasSize; i++) {
         printf("Input%-4d\t", i - biasSize + 1);
     }
-    for (auto k = biasSize; k < outputSize + biasSize; k++) {
+    for (auto k = biasSize; k < configuration[2] + biasSize; k++) {
         printf("Target%-4d\tOutput%-4d\t", k - biasSize + 1, k - biasSize + 1);
     }
     for (auto p = 0; p < numTrainingSets; p++) {
         printf("\n%d\t", p);
-        for (auto i = biasSize; i < inputSize + biasSize; i++) {
+        for (auto i = biasSize; i < configuration[0] + biasSize; i++) {
             printf("%f\t", (*trainingInput)[p + 1][i]);
         }
-        for (auto k = biasSize; k < outputSize + biasSize; k++) {
+        for (auto k = biasSize; k < configuration[2] + biasSize; k++) {
             printf("%f\t%f\t", (*trainingOutput)[p][k], layer[2].elements[p][k]);
         }
     }
