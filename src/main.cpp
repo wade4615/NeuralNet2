@@ -20,14 +20,10 @@ using namespace std;
 #include "matrix.h"
 #include "main.h"
 
-NeuralNetwork network;
 int numberOfLayers;
 
-Matrix inputLayer;
 Matrix inputMiddleWeights;
-Matrix middleLayer;
 Matrix middleOutputWeights;
-Matrix outputLayer;
 
 Matrix deltaWeightInputMiddle;
 Matrix deltaWeightMiddleOutput;
@@ -53,6 +49,8 @@ NetworkType Error1, Error2;
 NetworkType alpha;
 NetworkType eta;
 
+MatrixPtr layer;
+
 void initialize(int configuration[], int example, int bias) {
     trainingInput = NULL;
     trainingOutput = NULL;
@@ -71,32 +69,16 @@ void initialize(int configuration[], int example, int bias) {
 
     trainingSetOrder = new int[numTrainingSets];
 
-    network.configuration = new int[numberOfLayers];
-    network.numberOfLayers = numberOfLayers;
-    network.numberOfWeights = numberOfLayers - 1;
-    network.numberOfMiddleLayers = numberOfLayers - 2;
+    layer = new Matrix[3];
+    allocateMatrix(&layer[0], trainBias, inputBias, 0.0);
+    allocateMatrix(&layer[1], trainBias, middleBias, 0.0);
+    allocateMatrix(&layer[2], trainBias, outputBias, 0.0);
+    //inputLayer = &layer[0];
+    //middleLayer = &layer[1];
+    //outputLayer = &layer[2];
 
-    network.layer = new Matrix[network.numberOfLayers];
-    network.weights = new Matrix[network.numberOfWeights];
-    network.middleLayerDelta = new Array[network.numberOfMiddleLayers];
-
-    for (auto i = 0; i < network.numberOfLayers; i++) {
-        network.configuration[i] = configuration[i];
-        allocateMatrix(&network.layer[i], trainBias, configuration[i] + biasSize, 0.0);
-    }
-    for (auto i = 0; i < network.numberOfWeights; i++) {
-        allocateMatrix(&network.weights[i], configuration[i] + biasSize, configuration[i + 1] + biasSize, fRand(-1.0, 1.0));
-    }
-    for (auto i = 1; i < network.numberOfMiddleLayers; i++) {
-        allocateMatrix(&network.middleLayerDelta[i], configuration[i] + biasSize, 0.0);
-    }
-    allocateMatrix(&network.outputLayerDelta, outputBias, 0.0);
-
-    allocateMatrix(&inputLayer, trainBias, inputBias, 0.0);
     allocateMatrix(&inputMiddleWeights, inputBias, middleBias, fRand(-1.0, 1.0));
-    allocateMatrix(&middleLayer, trainBias, middleBias, 0.0);
     allocateMatrix(&middleOutputWeights, middleBias, outputBias, fRand(-1.0, 1.0));
-    allocateMatrix(&outputLayer, trainBias, outputBias, 0.0);
 
     allocateMatrix(&deltaWeightInputMiddle, inputBias, middleBias, 0.0);
     allocateMatrix(&deltaWeightMiddleOutput, middleBias, outputBias, 0.0);
@@ -107,23 +89,14 @@ void initialize(int configuration[], int example, int bias) {
 
 void shutDown() {
     delete[] trainingSetOrder;
-    deallocate(&inputLayer);
+    //deallocate(&inputLayer);
     deallocate(&inputMiddleWeights);
-    deallocate(&middleLayer);
+    //deallocate(&middleLayer);
     deallocate(&middleOutputWeights);
-    deallocate(&outputLayer);
+    //deallocate(&outputLayer);
     delete[] outputLayerDelta.elements;
     delete[] middleLayerDelta.elements;
     deallocate(&deltaWeightMiddleOutput);
-    for (auto i = 0; i < network.numberOfLayers; i++) {
-        deallocate(&network.layer[i]);
-    }
-    for (auto i = 0; i < network.numberOfWeights; i++) {
-        deallocate(&network.weights[i]);
-    }
-    for (auto i = 1; i < network.numberOfMiddleLayers; i++) {
-        deallocate(&network.middleLayerDelta[i]);
-    }
 }
 
 void setTrainingData(NeuralMatrix<double> *in, NeuralMatrix<double> *out) {
@@ -172,45 +145,31 @@ void forward(int p) {
     for (auto j = biasSize; j < middleSize + biasSize; j++) {
         NetworkType activate = inputMiddleWeights.elements[0][j];
         for (auto i = biasSize; i < inputSize + biasSize; i++) {
-            activate += inputLayer.elements[p + 1][i] * inputMiddleWeights.elements[i][j];
+            activate += layer[0].elements[p + 1][i] * inputMiddleWeights.elements[i][j];
         }
-        middleLayer.elements[p][j] = sigmoid(activate);
+        layer[1].elements[p][j] = sigmoid(activate);
     }
     for (auto k = biasSize; k < outputSize + biasSize; k++) {
         NetworkType activate = middleOutputWeights.elements[0][k];
         for (auto j = biasSize; j < middleSize + biasSize; j++) {
-            activate += middleLayer.elements[p][j] * middleOutputWeights.elements[j][k];
+            activate += layer[1].elements[p][j] * middleOutputWeights.elements[j][k];
         }
-        outputLayer.elements[p][k] = sigmoid(activate);
-    }
-    for (auto i = 0; i < network.numberOfWeights; i++) {
-        for (auto j = biasSize; j < network.configuration[i + 1] + biasSize; j++) {
-            NetworkType activate = network.weights[i].elements[0][j];
-            for (auto k = biasSize; k < network.configuration[i] + biasSize; k++) {
-                activate += network.layer[i].elements[p + 1][k] * network.weights[i].elements[k][j];
-            }
-            network.layer[i + 1].elements[p][j] = sigmoid(activate);
-        }
+        layer[2].elements[p][k] = sigmoid(activate);
     }
 }
 
 void computeError(int p) {
     for (auto k = biasSize; k < outputSize + biasSize; k++) {
-        NetworkType diff = (*trainingOutput)[p][k] - outputLayer.elements[p][k];
+        NetworkType diff = (*trainingOutput)[p][k] - layer[2].elements[p][k];
         Error1 += 0.5 * diff * diff;
-        outputLayerDelta.elements[k] = diff * sigmoidDerivative(outputLayer.elements[p][k]);
+        outputLayerDelta.elements[k] = diff * sigmoidDerivative(layer[2].elements[p][k]);
     }
     for (auto j = biasSize; j < middleSize + biasSize; j++) {
         NetworkType activate = 0.0;
         for (auto k = 1; k <= outputSize; k++) {
             activate += middleOutputWeights.elements[j][k] * outputLayerDelta.elements[k];
         }
-        middleLayerDelta.elements[j] = activate * sigmoidDerivative(middleLayer.elements[p][j]);
-    }
-    for (auto k = biasSize; k < outputSize + biasSize; k++) {
-        NetworkType diff = (*trainingOutput)[p][k] - network.layer[network.numberOfLayers - 1].elements[p][k];
-        Error2 += 0.5 * diff * diff;
-        network.outputLayerDelta.elements[k] = diff * sigmoidDerivative(network.layer[network.numberOfLayers - 1].elements[p][k]);
+        middleLayerDelta.elements[j] = activate * sigmoidDerivative(layer[1].elements[p][j]);
     }
 }
 
@@ -219,7 +178,7 @@ void backpropagate(int p) {
         deltaWeightMiddleOutput.elements[0][k] = eta * outputLayerDelta.elements[k] + alpha * deltaWeightMiddleOutput.elements[0][k];
         middleOutputWeights.elements[0][k] += deltaWeightMiddleOutput.elements[0][k];
         for (auto j = biasSize; j < middleSize + biasSize; j++) {
-            deltaWeightMiddleOutput.elements[j][k] = eta * middleLayer.elements[p][j] * outputLayerDelta.elements[k] + alpha * deltaWeightMiddleOutput.elements[j][k];
+            deltaWeightMiddleOutput.elements[j][k] = eta * layer[1].elements[p][j] * outputLayerDelta.elements[k] + alpha * deltaWeightMiddleOutput.elements[j][k];
             middleOutputWeights.elements[j][k] += deltaWeightMiddleOutput.elements[j][k];
         }
     }
@@ -227,7 +186,7 @@ void backpropagate(int p) {
         deltaWeightInputMiddle.elements[0][j] = eta * middleLayerDelta.elements[j] + alpha * deltaWeightInputMiddle.elements[0][j];
         inputMiddleWeights.elements[0][j] += deltaWeightInputMiddle.elements[0][j];
         for (auto i = biasSize; i < inputSize + biasSize; i++) {
-            deltaWeightInputMiddle.elements[i][j] = eta * inputLayer.elements[p + 1][i] * middleLayerDelta.elements[j] + alpha * deltaWeightInputMiddle.elements[i][j];
+            deltaWeightInputMiddle.elements[i][j] = eta * layer[0].elements[p + 1][i] * middleLayerDelta.elements[j] + alpha * deltaWeightInputMiddle.elements[i][j];
             inputMiddleWeights.elements[i][j] += deltaWeightInputMiddle.elements[i][j];
         }
     }
@@ -246,7 +205,7 @@ void printResults(int epoch) {
             printf("%f\t", (*trainingInput)[p + 1][i]);
         }
         for (auto k = biasSize; k < outputSize + biasSize; k++) {
-            printf("%f\t%f\t", (*trainingOutput)[p][k], outputLayer.elements[p][k]);
+            printf("%f\t%f\t", (*trainingOutput)[p][k], layer[2].elements[p][k]);
         }
     }
 }
@@ -259,8 +218,7 @@ int train(int numberOfEpochs) {
         for (int np = 0; np < numTrainingSets; np++) { /* repeat for all the training patterns */
             int p = trainingSetOrder[np];
             for (auto j = 0; j < inputBias; j++) {
-                inputLayer.elements[p + 1][j] = (*trainingInput)[p + 1][j];
-                network.layer[0].elements[p + 1][j] = (*trainingInput)[p + 1][j];
+                layer[0].elements[p + 1][j] = (*trainingInput)[p + 1][j];
             }
             forward(p);
             computeError(p);
