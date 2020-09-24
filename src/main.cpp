@@ -22,10 +22,8 @@ using namespace std;
 
 int numberOfLayers;
 
-Matrix deltaWeightInputMiddle;
-Matrix deltaWeightMiddleOutput;
 Array outputLayerDelta;
-Array middleLayerDelta;
+ArrayPtr middleLayerDelta;
 
 int *trainingSetOrder;
 int *configuration;
@@ -33,9 +31,6 @@ int numTrainingSets;
 int biasSize;
 
 int trainBias;
-int inputBias;
-int middleBias;
-int outputBias;
 
 NeuralMatrix<double> *trainingInput;
 NeuralMatrix<double> *trainingOutput;
@@ -46,6 +41,7 @@ NetworkType eta;
 
 MatrixPtr layer;
 MatrixPtr weights;
+MatrixPtr deltaWeights;
 
 void initialize(int config[], int example, int bias) {
     trainingInput = NULL;
@@ -56,32 +52,33 @@ void initialize(int config[], int example, int bias) {
     numTrainingSets = example;
 
     configuration = new int[numberOfLayers];
-    configuration[0] = config[0];
-    configuration[1] = config[1];
-    configuration[2] = config[2];
+    for (auto i = 0; i < numberOfLayers; i++) {
+        configuration[i] = config[i];
+    }
 
     biasSize = bias;
     trainBias = numTrainingSets + biasSize;
-    inputBias = configuration[0] + biasSize;
-    middleBias = configuration[1] + biasSize;
-    outputBias = configuration[2] + biasSize;
 
     trainingSetOrder = new int[numTrainingSets];
 
-    layer = new Matrix[3];
-    allocateMatrix(&layer[0], trainBias, inputBias, 0.0);
-    allocateMatrix(&layer[1], trainBias, middleBias, 0.0);
-    allocateMatrix(&layer[2], trainBias, outputBias, 0.0);
+    layer = new Matrix[numberOfLayers];
+    for (auto i = 0; i < numberOfLayers; i++) {
+        allocateMatrix(&layer[i], trainBias, configuration[i] + biasSize, 0.0);
+    }
 
-    weights = new Matrix[2];
-    allocateMatrix(&weights[0], inputBias, middleBias, fRand(-1.0, 1.0));
-    allocateMatrix(&weights[1], middleBias, outputBias, fRand(-1.0, 1.0));
+    weights = new Matrix[numberOfLayers - 1];
+    deltaWeights = new Matrix[numberOfLayers - 1];
+    for (auto i = 0; i < numberOfLayers - 1; i++) {
+        allocateMatrix(&weights[i], configuration[i] + biasSize, configuration[i + 1] + biasSize, fRand(-1.0, 1.0));
+        allocateMatrix(&deltaWeights[i], configuration[i] + biasSize, configuration[i + 1] + biasSize, 0.0);
+    }
 
-    allocateMatrix(&deltaWeightInputMiddle, inputBias, middleBias, 0.0);
-    allocateMatrix(&deltaWeightMiddleOutput, middleBias, outputBias, 0.0);
+    allocateMatrix(&outputLayerDelta, configuration[2] + biasSize, 0.0);
 
-    allocateMatrix(&outputLayerDelta, outputBias, 0.0);
-    allocateMatrix(&middleLayerDelta, middleBias, 0.0);
+    middleLayerDelta = new Array[numberOfLayers - 2];
+    for (auto i = 0; i < numberOfLayers - 2; i++) {
+        allocateMatrix(&middleLayerDelta[i], configuration[i + 1] + biasSize, 0.0);
+    }
 }
 
 void shutDown() {
@@ -94,8 +91,9 @@ void shutDown() {
     delete[] layer;
     delete[] weights;
     delete[] outputLayerDelta.elements;
-    delete[] middleLayerDelta.elements;
-    deallocate(&deltaWeightMiddleOutput);
+    deallocate(&middleLayerDelta[0]);
+    delete[] middleLayerDelta;
+    //deallocate(&deltaWeightMiddleOutput);
 }
 
 void setTrainingData(NeuralMatrix<double> *in, NeuralMatrix<double> *out) {
@@ -168,25 +166,25 @@ void computeError(int p) {
         for (auto k = 1; k <= configuration[2]; k++) {
             activate += weights[1].elements[j][k] * outputLayerDelta.elements[k];
         }
-        middleLayerDelta.elements[j] = activate * sigmoidDerivative(layer[1].elements[p][j]);
+        middleLayerDelta[0].elements[j] = activate * sigmoidDerivative(layer[1].elements[p][j]);
     }
 }
 
 void backpropagate(int p) {
     for (auto k = biasSize; k < configuration[2] + biasSize; k++) {
-        deltaWeightMiddleOutput.elements[0][k] = eta * outputLayerDelta.elements[k] + alpha * deltaWeightMiddleOutput.elements[0][k];
-        weights[1].elements[0][k] += deltaWeightMiddleOutput.elements[0][k];
+        deltaWeights[1].elements[0][k] = eta * outputLayerDelta.elements[k] + alpha * deltaWeights[1].elements[0][k];
+        weights[1].elements[0][k] += deltaWeights[1].elements[0][k];
         for (auto j = biasSize; j < configuration[1] + biasSize; j++) {
-            deltaWeightMiddleOutput.elements[j][k] = eta * layer[1].elements[p][j] * outputLayerDelta.elements[k] + alpha * deltaWeightMiddleOutput.elements[j][k];
-            weights[1].elements[j][k] += deltaWeightMiddleOutput.elements[j][k];
+            deltaWeights[1].elements[j][k] = eta * layer[1].elements[p][j] * outputLayerDelta.elements[k] + alpha * deltaWeights[1].elements[j][k];
+            weights[1].elements[j][k] += deltaWeights[1].elements[j][k];
         }
     }
     for (auto j = biasSize; j < configuration[1] + biasSize; j++) {
-        deltaWeightInputMiddle.elements[0][j] = eta * middleLayerDelta.elements[j] + alpha * deltaWeightInputMiddle.elements[0][j];
-        weights[0].elements[0][j] += deltaWeightInputMiddle.elements[0][j];
+        deltaWeights[0].elements[0][j] = eta * middleLayerDelta[0].elements[j] + alpha * deltaWeights[0].elements[0][j];
+        weights[0].elements[0][j] += deltaWeights[0].elements[0][j];
         for (auto i = biasSize; i < configuration[0] + biasSize; i++) {
-            deltaWeightInputMiddle.elements[i][j] = eta * layer[0].elements[p + 1][i] * middleLayerDelta.elements[j] + alpha * deltaWeightInputMiddle.elements[i][j];
-            weights[0].elements[i][j] += deltaWeightInputMiddle.elements[i][j];
+            deltaWeights[0].elements[i][j] = eta * layer[0].elements[p + 1][i] * middleLayerDelta[0].elements[j] + alpha * deltaWeights[0].elements[i][j];
+            weights[0].elements[i][j] += deltaWeights[0].elements[i][j];
         }
     }
 }
@@ -216,7 +214,7 @@ int train(int numberOfEpochs) {
         Error1 = 0.0;
         for (int np = 0; np < numTrainingSets; np++) { /* repeat for all the training patterns */
             int p = trainingSetOrder[np];
-            for (auto j = 0; j < inputBias; j++) {
+            for (auto j = 0; j < configuration[0] + biasSize; j++) {
                 layer[0].elements[p + 1][j] = (*trainingInput)[p + 1][j];
             }
             forward(p);
