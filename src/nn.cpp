@@ -7,24 +7,21 @@
 //============================================================================
 #include"nn.h"
 
-#define NUMPAT 4
-#define NUMIN  2
-#define NUMHID 2
-#define NUMOUT 1
-
 int epoch;
-int numberOfExamples = 4;
-int trainingSetOrder[4 + 1];
-int configuration[] = { 2, 2, 1 };
-int numberOfLayers = sizeof(configuration) / sizeof(int);
-int NumberOfWeights = numberOfLayers - 1;
-int NumPattern = 4;
-int outputLayerIndex;
 long memory = 0;
+long double Error;
+
+int configuration[] = { 2, 2, 2, 1 };
+int NumPattern = 4;
+
+int *trainingSetOrder;
+int numberOfLayers = sizeof(configuration) / sizeof(int);
+int numberOfWeights = numberOfLayers - 1;
+int outputLayerIndex;
+NetworkType eta = 0.5, alpha = 0.9;
 
 NetworkType trainingInput[4][2] = { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } };
 NetworkType trainingOutput[4][1] = { { 0 }, { 1 }, { 1 }, { 0 } };
-NetworkType Error, eta = 0.5, alpha = 0.9;
 
 MatrixPtr Layers;
 MatrixPtr Weights;
@@ -47,33 +44,36 @@ double sigmoidDerivative(double x) {
 }
 
 void initialize() {
-    allocateMatrix(&Expected, numberOfExamples + 1, configuration[2] + 1, 0);
+    trainingSetOrder = new int[NumPattern + 1];
+
+    outputLayerIndex = numberOfLayers - 1;
+
+    allocateMatrix(&Expected, NumPattern + 1, configuration[outputLayerIndex] + 1, 0);
     memory += Expected.size;
 
     Layers = new Matrix[numberOfLayers];
     for (auto i = 0; i < numberOfLayers; i++) {
-        allocateMatrix(&Layers[i], numberOfExamples + 1, configuration[i] + 1, 0);
+        allocateMatrix(&Layers[i], NumPattern + 1, configuration[i] + 1, 0);
         memory += Layers[i].size;
     }
 
-    Weights = new Matrix[NumberOfWeights];
-    for (auto i = 0; i < NumberOfWeights; i++) {
+    Weights = new Matrix[numberOfWeights];
+    for (auto i = 0; i < numberOfWeights; i++) {
         allocateMatrix(&Weights[i], configuration[i] + 1, configuration[i + 1] + 1, -1.0, 1.0);
         memory += Weights[i].size;
     }
 
-    Delta = new Array[NumberOfWeights];
-    for (auto i = 0; i < NumberOfWeights; i++) {
+    Delta = new Array[numberOfWeights];
+    for (auto i = 0; i < numberOfWeights; i++) {
         allocateMatrix(&Delta[i], configuration[i + 1] + 1, 0);
         memory += Delta[i].size;
     }
 
-    DeltaWeight = new Matrix[NumberOfWeights];
-    for (auto i = 0; i < NumberOfWeights; i++) {
+    DeltaWeight = new Matrix[numberOfWeights];
+    for (auto i = 0; i < numberOfWeights; i++) {
         allocateMatrix(&DeltaWeight[i], configuration[i] + 1, configuration[i + 1] + 1, 0);
         memory += DeltaWeight[i].size;
     }
-    outputLayerIndex = numberOfLayers - 1;
     outputLayer = &Layers[outputLayerIndex];
 }
 
@@ -85,17 +85,17 @@ void shutDown() {
     }
     delete[] Layers;
 
-    for (auto i = 0; i < NumberOfWeights; i++) {
+    for (auto i = 0; i < numberOfWeights; i++) {
         deallocate(&Weights[i]);
     }
     delete[] Weights;
 
-    for (auto i = 0; i < NumberOfWeights; i++) {
+    for (auto i = 0; i < numberOfWeights; i++) {
         deallocate(&Delta[i]);
     }
     delete[] Delta;
 
-    for (auto i = 0; i < NumberOfWeights; i++) {
+    for (auto i = 0; i < numberOfWeights; i++) {
         deallocate(&DeltaWeight[i]);
     }
     delete[] DeltaWeight;
@@ -106,7 +106,7 @@ void randomizeInput() {
         trainingSetOrder[p] = p;
     }
     for (auto p = 1; p <= NumPattern; p++) {
-        int np = p + ((double) rand() / ((double) RAND_MAX + 1)) * (NumPattern + 1 - p);
+        int np = p + ((NetworkType) rand() / ((NetworkType) RAND_MAX + 1)) * (NumPattern + 1 - p);
         int op = trainingSetOrder[p];
         trainingSetOrder[p] = trainingSetOrder[np];
         trainingSetOrder[np] = op;
@@ -114,20 +114,20 @@ void randomizeInput() {
 }
 
 void output() {
-    printf("\nNETWORK DATA - EPOCH %d\tError = %f\n\nPat\t", epoch, Error);
+    printf("\nNETWORK DATA - EPOCH %d\tError = %2.9Lf\n\nPat\t", epoch, Error);
     for (auto i = 1; i <= configuration[0]; i++) {
         printf("Input%-4d\t", i);
     }
-    for (auto k = 1; k <= configuration[2]; k++) {
+    for (auto k = 1; k <= configuration[outputLayerIndex]; k++) {
         printf("Target%-4d\tOutput%-4d\t", k, k);
     }
     for (auto p = 1; p <= NumPattern; p++) {
         printf("\n%d\t", p);
         for (auto i = 1; i <= configuration[0]; i++) {
-            printf("%f\t", Layers[0].elements[p][i]);
+            printf("%2.9Lf\t", Layers[0].elements[p][i]);
         }
         for (auto k = 1; k <= configuration[outputLayerIndex]; k++) {
-            printf("%f\t%f\t", Expected.elements[p][k], outputLayer->elements[p][k]);
+            printf("%2.9Lf\t%2.9Lf\t", Expected.elements[p][k], outputLayer->elements[p][k]);
         }
     }
     printf("\nmemory used %4.4f bytes", (double) memory);
@@ -151,13 +151,14 @@ void computeError(int p) {
         Error += 0.5 * diff * diff;
         Delta[outputLayerIndex - 1].elements[i] = diff * sigmoidDerivative(outputLayer->elements[p][i]);
     }
-    int k = 0;
-    for (auto j = 1; j <= configuration[1]; j++) {
-        NetworkType accumulate = 0.0;
-        for (auto i = 1; i <= configuration[2]; i++) {
-            accumulate += Weights[k + 1].elements[j][i] * Delta[k + 1].elements[i];
+    for (auto k = numberOfLayers - 3; k >= 0; k--) {
+        for (auto j = 1; j <= configuration[k + 1]; j++) {
+            NetworkType accumulate = 0.0;
+            for (auto i = 1; i <= configuration[k + 2]; i++) {
+                accumulate += Weights[k + 1].elements[j][i] * Delta[k + 1].elements[i];
+            }
+            Delta[k].elements[j] = accumulate * sigmoidDerivative(Layers[k + 1].elements[p][j]);
         }
-        Delta[k].elements[j] = accumulate * sigmoidDerivative(Layers[k + 1].elements[p][j]);
     }
 }
 
@@ -176,7 +177,7 @@ void backPropagate(int p) {
 
 void train() {
     for (auto p = 0; p < NumPattern; p++) {
-        for (auto j = 0; j < configuration[2]; j++) {
+        for (auto j = 0; j < configuration[outputLayerIndex]; j++) {
             Expected.elements[p + 1][j + 1] = trainingOutput[p][j];
         }
     }
@@ -195,7 +196,7 @@ void train() {
             backPropagate(p);
         }
 //        if (epoch % 100 == 0)
-//            printf("\nEpoch %-5d :   Error = %f", epoch, Error);
+//            printf("\nEpoch %-5d :   Error = %2.9Lf", epoch, Error);
         if (Error < 0.0004)
             break;
     }

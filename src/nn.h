@@ -14,8 +14,9 @@
 #include <time.h>
 #include <math.h>
 #include <fcntl.h>
+#define printf __mingw_printf
 
-typedef double NetworkType;
+typedef long double NetworkType;
 typedef NetworkType *NetworkTypePtr;
 typedef NetworkTypePtr *NetworkTypePtrPtr;
 
