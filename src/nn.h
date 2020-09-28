@@ -24,6 +24,7 @@ typedef struct Array {
         NetworkTypePtr elements;
         int number;
         long size;
+        NetworkType& operator[](int index);
 } Array, *ArrayPtr, **ArrayPtrPtr;
 
 typedef struct Matrix {
@@ -32,6 +33,11 @@ typedef struct Matrix {
         int cols;
         long size;
 } Matrix, *MatrixPtr, **MatrixPtrPtr;
+
+typedef struct Settings {
+        Array configuration;
+        int NumPattern;
+} Settings, *SettingsPtr, **SettingsPtrPtr;
 
 NetworkType fRand(NetworkType fMin, NetworkType fMax);
 
