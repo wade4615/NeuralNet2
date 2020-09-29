@@ -84,12 +84,11 @@ class NeuralNetwork {
     protected:
         double sigmoid(double x);
         double sigmoidDerivative(double x);
-        void shutDown();
-        void randomizeInput();
         void forward(int p);
         void computeError(int p);
         void backPropagate(int p);
     private:
+        void randomizeInput();
         NetworkType fRand(NetworkType fMin, NetworkType fMax);
         long allocateMatrix(NetworkTypePtrPtr *matrix, int size1, int size2, double low, double high);
         long allocateMatrix(NetworkTypePtrPtr *matrix, int size1, int size2, double value);

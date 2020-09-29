@@ -14,8 +14,9 @@ NeuralNetwork::NeuralNetwork(const int numPatterns, MatrixPtr in, MatrixPtr out,
     settings->NumPattern = numPatterns;
     settings->numberOfLayers = size;
     settings->numberOfWeights = settings->numberOfLayers - 1;
-    settings->trainingSetOrder = new int[settings->NumPattern + 1];
     settings->outputLayerIndex = settings->numberOfLayers - 1;
+    settings->trainingSetOrder = new int[settings->NumPattern + 1];
+
     allocateMatrix(&settings->configuration, settings->numberOfLayers, 0);
     for (auto i = 0; i < settings->numberOfLayers; i++) {
         settings->configuration[i] = config[i];
