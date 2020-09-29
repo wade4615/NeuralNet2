@@ -39,6 +39,8 @@ typedef struct Settings {
         int NumPattern;
         int numberOfLayers;
         int numberOfWeights;
+        NetworkTypePtrPtr trainingInput;
+        NetworkTypePtrPtr trainingOutput;
 } Settings, *SettingsPtr, **SettingsPtrPtr;
 
 NetworkType fRand(NetworkType fMin, NetworkType fMax);
