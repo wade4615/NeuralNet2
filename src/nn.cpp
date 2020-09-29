@@ -12,10 +12,10 @@ int main() {
     const int numPatterns = 4;
     Matrix trainingInput = { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } };
     Matrix trainingOutput = { { 0 }, { 1 }, { 1 }, { 0 } };
-    int config[] = { 2, 20, 25, 1 };
+    int config[] = { 2, 2, 1 };
 
     NeuralNetwork net(numPatterns, &trainingInput, &trainingOutput, config, sizeof(config) / sizeof(int));
-    net.train();
+    net.train(100000);
     net.output();
     printf("\n\nGoodbye!\n\n");
     return 1;

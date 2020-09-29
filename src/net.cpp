@@ -114,7 +114,7 @@ long NeuralNetwork::allocateMatrix(NetworkTypePtrPtr *matrix, int size1, int siz
             (*matrix)[i][j] = value;
         }
     }
-    return size1 * size2 * sizeof(NetworkType);
+    return memory;
 }
 
 void NeuralNetwork::allocateMatrix(MatrixPtr matrix, int size1, int size2, double low, double high) {
@@ -214,7 +214,7 @@ void NeuralNetwork::output() {
     }
     double t = ((double) chrono::duration_cast<chrono::microseconds>(tend - tbegin).count()) / 1000000.0;
     printf("\n\nTraining Elapsed Time = %6.4f seconds\n", t);
-    printf("Training Memory Used = %ld bytes\n", memory);
+    printf("Training Memory Used = %'ld bytes\n", memory);
     long numberOfNeurons = 0;
     for (auto k = 0; k < settings->numberOfLayers; k++) {
         numberOfNeurons += settings->configuration[k];
@@ -223,7 +223,7 @@ void NeuralNetwork::output() {
     for (auto k = 0; k < settings->numberOfWeights; k++) {
         numberOfConnections += Weights[k].rows * Weights[k].cols;
     }
-    double connPerSec = numberOfConnections / t;
+    double connPerSec = (numberOfConnections * epoch * settings->NumPattern) / t;
     printf("Neurons Used = %ld\n", numberOfNeurons);
     printf("Neuron Connections Used = %ld\n", numberOfConnections);
     printf("Connections Speed = %6.2f connections/second\n", connPerSec);
@@ -271,7 +271,7 @@ void NeuralNetwork::backPropagate(int p) {
     }
 }
 
-void NeuralNetwork::train() {
+void NeuralNetwork::train(int epochLimit) {
     tbegin = chrono::steady_clock::now();
     for (auto p = 0; p < settings->NumPattern; p++) {
         for (auto j = 0; j < settings->configuration[settings->outputLayerIndex]; j++) {
@@ -283,7 +283,7 @@ void NeuralNetwork::train() {
             Layers[0].elements[p + 1][j + 1] = settings->trainingInput[p][j];
         }
     }
-    for (epoch = 0; epoch < 100000; epoch++) {
+    for (epoch = 0; epoch < epochLimit; epoch++) {
         randomizeInput();
         Error = 0.0;
         for (auto np = 1; np <= settings->NumPattern; np++) {

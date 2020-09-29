@@ -8,7 +8,6 @@
 #ifndef NN_H_
 #define NN_H_
 
-//#include <iostream>
 #include <initializer_list>
 #include <cstdlib>
 #include <ctime>
@@ -79,7 +78,7 @@ class NeuralNetwork {
     public:
         NeuralNetwork(const int numPatterns, MatrixPtr in, MatrixPtr out, int config[], int size);
         virtual ~NeuralNetwork();
-        void train();
+        void train(int epochLimit);
         void output();
     protected:
         double sigmoid(double x);
