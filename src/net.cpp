@@ -212,7 +212,8 @@ void NeuralNetwork::output() {
             printf("%2.9Lf\t%2.9Lf\t", Expected.elements[p][k], outputLayer->elements[p][k]);
         }
     }
-    cout << endl << endl << "Training Elapsed Time = " << chrono::duration_cast<chrono::microseconds>(tend - tbegin).count() / 1000000.0 << " seconds" << endl;
+    double t = ((double) chrono::duration_cast<chrono::microseconds>(tend - tbegin).count()) / 1000000.0;
+    printf("\n\nTraining Elapsed Time = %6.4f seconds\n", t);
     printf("Training Memory Used = %ld bytes\n", memory);
     long numberOfNeurons = 0;
     for (auto k = 0; k < settings->numberOfLayers; k++) {
@@ -222,8 +223,10 @@ void NeuralNetwork::output() {
     for (auto k = 0; k < settings->numberOfWeights; k++) {
         numberOfConnections += Weights[k].rows * Weights[k].cols;
     }
+    double connPerSec = numberOfConnections / t;
     printf("Neurons Used = %ld\n", numberOfNeurons);
     printf("Neuron Connections Used = %ld\n", numberOfConnections);
+    printf("Connections Speed = %6.2f connections/second\n", connPerSec);
 }
 
 void NeuralNetwork::forward(int p) {

@@ -8,7 +8,7 @@
 #ifndef NN_H_
 #define NN_H_
 
-#include <iostream>
+//#include <iostream>
 #include <initializer_list>
 #include <cstdlib>
 #include <ctime>
