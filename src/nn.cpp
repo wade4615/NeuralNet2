@@ -6,15 +6,15 @@
 // Description : Multihidden layer backpropagation net
 //============================================================================
 #include"nn.h"
+using namespace std;
 
 int epoch;
 long memory = 0;
 long double Error;
 
-int *trainingSetOrder;
-int outputLayerIndex;
 NetworkType eta = 0.5, alpha = 0.9;
-
+chrono::steady_clock::time_point tbegin;
+chrono::steady_clock::time_point tend;
 MatrixPtr Layers;
 MatrixPtr Weights;
 Matrix Expected;
@@ -36,9 +36,7 @@ double sigmoidDerivative(double x) {
 }
 
 void initialize(SettingsPtr settings) {
-    trainingSetOrder = new int[settings->NumPattern + 1];
-
-    allocateMatrix(&Expected, settings->NumPattern + 1, settings->configuration[outputLayerIndex] + 1, 0);
+    allocateMatrix(&Expected, settings->NumPattern + 1, settings->configuration[settings->outputLayerIndex] + 1, 0);
     memory += Expected.size;
 
     Layers = new Matrix[settings->numberOfLayers];
@@ -65,7 +63,7 @@ void initialize(SettingsPtr settings) {
         memory += DeltaWeight[i].size;
     }
 
-    outputLayer = &Layers[outputLayerIndex];
+    outputLayer = &Layers[settings->outputLayerIndex];
 }
 
 void shutDown(SettingsPtr settings) {
@@ -90,17 +88,20 @@ void shutDown(SettingsPtr settings) {
         deallocate(&DeltaWeight[i]);
     }
     delete[] DeltaWeight;
+
+    deallocate(&settings->trainingInput);
+    deallocate(&settings->trainingOutput);
 }
 
 void randomizeInput(SettingsPtr settings) {
     for (auto p = 1; p <= settings->NumPattern; p++) {
-        trainingSetOrder[p] = p;
+        settings->trainingSetOrder[p] = p;
     }
     for (auto p = 1; p <= settings->NumPattern; p++) {
         int np = p + ((NetworkType) rand() / ((NetworkType) RAND_MAX + 1)) * (settings->NumPattern + 1 - p);
-        int op = trainingSetOrder[p];
-        trainingSetOrder[p] = trainingSetOrder[np];
-        trainingSetOrder[np] = op;
+        int op = settings->trainingSetOrder[p];
+        settings->trainingSetOrder[p] = settings->trainingSetOrder[np];
+        settings->trainingSetOrder[np] = op;
     }
 }
 
@@ -109,7 +110,7 @@ void output(SettingsPtr settings) {
     for (auto i = 1; i <= settings->configuration[0]; i++) {
         printf("Input%-4d\t", i);
     }
-    for (auto k = 1; k <= settings->configuration[outputLayerIndex]; k++) {
+    for (auto k = 1; k <= settings->configuration[settings->outputLayerIndex]; k++) {
         printf("Target%-4d\tOutput%-4d\t", k, k);
     }
     for (auto p = 1; p <= settings->NumPattern; p++) {
@@ -117,11 +118,13 @@ void output(SettingsPtr settings) {
         for (auto i = 1; i <= settings->configuration[0]; i++) {
             printf("%2.9Lf\t", Layers[0].elements[p][i]);
         }
-        for (auto k = 1; k <= settings->configuration[outputLayerIndex]; k++) {
+        for (auto k = 1; k <= settings->configuration[settings->outputLayerIndex]; k++) {
             printf("%2.9Lf\t%2.9Lf\t", Expected.elements[p][k], outputLayer->elements[p][k]);
         }
     }
-    printf("\nmemory used %4.4f bytes", (double) memory);
+    cout << endl << endl << "Training Elapsed Time = " << chrono::duration_cast<chrono::microseconds>(tend - tbegin).count() / 1000000.0 << " seconds" << endl;
+    double memk = (double) memory / 1024.0;
+    printf("Training Memory Used = %4.4f kilobytes", memk);
 }
 
 void forward(SettingsPtr settings, int p) {
@@ -137,10 +140,10 @@ void forward(SettingsPtr settings, int p) {
 }
 
 void computeError(SettingsPtr settings, int p) {
-    for (auto i = 1; i <= settings->configuration[outputLayerIndex]; i++) {
+    for (auto i = 1; i <= settings->configuration[settings->outputLayerIndex]; i++) {
         NetworkType diff = (Expected.elements[p][i] - outputLayer->elements[p][i]);
         Error += 0.5 * diff * diff;
-        Delta[outputLayerIndex - 1].elements[i] = diff * sigmoidDerivative(outputLayer->elements[p][i]);
+        Delta[settings->outputLayerIndex - 1].elements[i] = diff * sigmoidDerivative(outputLayer->elements[p][i]);
     }
     for (auto k = settings->numberOfLayers - 3; k >= 0; k--) {
         for (auto j = 1; j <= settings->configuration[k + 1]; j++) {
@@ -167,8 +170,9 @@ void backPropagate(SettingsPtr settings, int p) {
 }
 
 void train(SettingsPtr settings) {
+    tbegin = chrono::steady_clock::now();
     for (auto p = 0; p < settings->NumPattern; p++) {
-        for (auto j = 0; j < settings->configuration[outputLayerIndex]; j++) {
+        for (auto j = 0; j < settings->configuration[settings->outputLayerIndex]; j++) {
             Expected.elements[p + 1][j + 1] = settings->trainingOutput[p][j];
         }
     }
@@ -181,49 +185,52 @@ void train(SettingsPtr settings) {
         randomizeInput(settings);
         Error = 0.0;
         for (auto np = 1; np <= settings->NumPattern; np++) {
-            auto p = trainingSetOrder[np];
+            auto p = settings->trainingSetOrder[np];
             forward(settings, p);
             computeError(settings, p);
             backPropagate(settings, p);
         }
-        if (epoch % 100 == 0)
-            printf("\nEpoch %-5d :   Error = %2.9Lf", epoch, Error);
-        if (Error < 0.0004)
+//        if (epoch % 100 == 0)
+//            printf("\nEpoch %-5d :   Error = %2.9Lf", epoch, Error);
+        if (Error < 0.00004)
             break;
     }
+    tend = chrono::steady_clock::now();
 }
 
-NetworkType& Array::operator[](int index) {
-    return elements[index];
-}
-
-int main() {
-    NetworkType trainingInput[4][2] = { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } };
-    NetworkType trainingOutput[4][1] = { { 0 }, { 1 }, { 1 }, { 0 } };
-    int config[] = { 2, 2, 2, 1 };
-
+SettingsPtr createSettings(const int numPatterns, MatrixPtr in, MatrixPtr out, int config[], int size) {
     SettingsPtr settings = new Settings;
-    settings->NumPattern = 4;
-    settings->numberOfLayers = sizeof(config) / sizeof(int);
+    settings->NumPattern = numPatterns;
+    settings->numberOfLayers = size;
     settings->numberOfWeights = settings->numberOfLayers - 1;
-    outputLayerIndex = settings->numberOfLayers - 1;
+    settings->trainingSetOrder = new int[settings->NumPattern + 1];
+    settings->outputLayerIndex = settings->numberOfLayers - 1;
     allocateMatrix(&settings->configuration, settings->numberOfLayers, 0);
     for (auto i = 0; i < settings->numberOfLayers; i++) {
         settings->configuration[i] = config[i];
     }
     allocateMatrix(&settings->trainingInput, settings->NumPattern, settings->configuration[0], 0);
-    allocateMatrix(&settings->trainingOutput, settings->NumPattern, settings->configuration[outputLayerIndex], 0);
+    allocateMatrix(&settings->trainingOutput, settings->NumPattern, settings->configuration[settings->outputLayerIndex], 0);
     for (auto p = 0; p < settings->NumPattern; p++) {
-        for (auto j = 0; j < settings->configuration[outputLayerIndex]; j++) {
-            settings->trainingOutput[p][j] = trainingOutput[p][j];
+        for (auto j = 0; j < settings->configuration[settings->outputLayerIndex]; j++) {
+            settings->trainingOutput[p][j] = (*out)[p][j];
         }
     }
     for (auto p = 0; p < settings->NumPattern; p++) {
         for (auto j = 0; j < settings->configuration[0]; j++) {
-            settings->trainingInput[p][j] = trainingInput[p][j];
+            settings->trainingInput[p][j] = (*in)[p][j];
         }
     }
+    return settings;
+}
 
+int main() {
+    const int numPatterns = 4;
+    Matrix trainingInput = { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } };
+    Matrix trainingOutput = { { 0 }, { 1 }, { 1 }, { 0 } };
+    int config[] = { 2, 20, 25, 1 };
+
+    SettingsPtr settings = createSettings(numPatterns, &trainingInput, &trainingOutput, config, sizeof(config) / sizeof(int));
     initialize(settings);
     train(settings);
     output(settings);
