@@ -1,10 +1,10 @@
-/*
- * nn.h
- *
- *  Created on: Sep 28, 2020
- *      Author: wade4
- */
-
+//============================================================================
+// Name        : nn.h
+// Author      : Christopher D. Wade
+// Version     : 1.0
+// Copyright   : (c) 2020 Christopher D. Wade
+// Description : Multihidden layer backpropagation net
+//============================================================================
 #ifndef NN_H_
 #define NN_H_
 
@@ -37,6 +37,8 @@ typedef struct Matrix {
 typedef struct Settings {
         Array configuration;
         int NumPattern;
+        int numberOfLayers;
+        int numberOfWeights;
 } Settings, *SettingsPtr, **SettingsPtrPtr;
 
 NetworkType fRand(NetworkType fMin, NetworkType fMax);

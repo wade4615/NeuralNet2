@@ -1,9 +1,9 @@
 //============================================================================
 // Name        : nn.cpp
-// Author      :
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
+// Author      : Christopher D. Wade
+// Version     : 1.0
+// Copyright   : (c) 2020 Christopher D. Wade
+// Description : Multihidden layer backpropagation net
 //============================================================================
 #include"nn.h"
 
@@ -12,8 +12,6 @@ long memory = 0;
 long double Error;
 
 int *trainingSetOrder;
-int numberOfLayers;
-int numberOfWeights;
 int outputLayerIndex;
 NetworkType eta = 0.5, alpha = 0.9;
 
@@ -43,31 +41,31 @@ double sigmoidDerivative(double x) {
 void initialize(Settings settings) {
     trainingSetOrder = new int[settings.NumPattern + 1];
 
-    outputLayerIndex = numberOfLayers - 1;
+    outputLayerIndex = settings.numberOfLayers - 1;
 
     allocateMatrix(&Expected, settings.NumPattern + 1, settings.configuration[outputLayerIndex] + 1, 0);
     memory += Expected.size;
 
-    Layers = new Matrix[numberOfLayers];
-    for (auto i = 0; i < numberOfLayers; i++) {
+    Layers = new Matrix[settings.numberOfLayers];
+    for (auto i = 0; i < settings.numberOfLayers; i++) {
         allocateMatrix(&Layers[i], settings.NumPattern + 1, settings.configuration[i] + 1, 0);
         memory += Layers[i].size;
     }
 
-    Weights = new Matrix[numberOfWeights];
-    for (auto i = 0; i < numberOfWeights; i++) {
+    Weights = new Matrix[settings.numberOfWeights];
+    for (auto i = 0; i < settings.numberOfWeights; i++) {
         allocateMatrix(&Weights[i], settings.configuration[i] + 1, settings.configuration[i + 1] + 1, -1.0, 1.0);
         memory += Weights[i].size;
     }
 
-    Delta = new Array[numberOfWeights];
-    for (auto i = 0; i < numberOfWeights; i++) {
+    Delta = new Array[settings.numberOfWeights];
+    for (auto i = 0; i < settings.numberOfWeights; i++) {
         allocateMatrix(&Delta[i], settings.configuration[i + 1] + 1, 0);
         memory += Delta[i].size;
     }
 
-    DeltaWeight = new Matrix[numberOfWeights];
-    for (auto i = 0; i < numberOfWeights; i++) {
+    DeltaWeight = new Matrix[settings.numberOfWeights];
+    for (auto i = 0; i < settings.numberOfWeights; i++) {
         allocateMatrix(&DeltaWeight[i], settings.configuration[i] + 1, settings.configuration[i + 1] + 1, 0);
         memory += DeltaWeight[i].size;
     }
@@ -75,25 +73,25 @@ void initialize(Settings settings) {
     outputLayer = &Layers[outputLayerIndex];
 }
 
-void shutDown() {
+void shutDown(Settings settings) {
     deallocate(&Expected);
 
-    for (auto i = 0; i < numberOfLayers; i++) {
+    for (auto i = 0; i < settings.numberOfLayers; i++) {
         deallocate(&Layers[i]);
     }
     delete[] Layers;
 
-    for (auto i = 0; i < numberOfWeights; i++) {
+    for (auto i = 0; i < settings.numberOfWeights; i++) {
         deallocate(&Weights[i]);
     }
     delete[] Weights;
 
-    for (auto i = 0; i < numberOfWeights; i++) {
+    for (auto i = 0; i < settings.numberOfWeights; i++) {
         deallocate(&Delta[i]);
     }
     delete[] Delta;
 
-    for (auto i = 0; i < numberOfWeights; i++) {
+    for (auto i = 0; i < settings.numberOfWeights; i++) {
         deallocate(&DeltaWeight[i]);
     }
     delete[] DeltaWeight;
@@ -132,7 +130,7 @@ void output(Settings settings) {
 }
 
 void forward(Settings settings, int p) {
-    for (auto k = 1; k <= numberOfLayers - 1; k++) {
+    for (auto k = 1; k <= settings.numberOfLayers - 1; k++) {
         for (auto j = 1; j <= settings.configuration[k]; j++) {
             NetworkType accumulate = Weights[k - 1].elements[0][j];
             for (auto i = 1; i <= settings.configuration[k - 1]; i++) {
@@ -149,7 +147,7 @@ void computeError(Settings settings, int p) {
         Error += 0.5 * diff * diff;
         Delta[outputLayerIndex - 1].elements[i] = diff * sigmoidDerivative(outputLayer->elements[p][i]);
     }
-    for (auto k = numberOfLayers - 3; k >= 0; k--) {
+    for (auto k = settings.numberOfLayers - 3; k >= 0; k--) {
         for (auto j = 1; j <= settings.configuration[k + 1]; j++) {
             NetworkType accumulate = 0.0;
             for (auto i = 1; i <= settings.configuration[k + 2]; i++) {
@@ -161,7 +159,7 @@ void computeError(Settings settings, int p) {
 }
 
 void backPropagate(Settings settings, int p) {
-    for (auto k = numberOfLayers - 2; k >= 0; k--) {
+    for (auto k = settings.numberOfLayers - 2; k >= 0; k--) {
         for (auto j = 1; j <= settings.configuration[k + 1]; j++) {
             DeltaWeight[k].elements[0][j] = eta * Delta[k].elements[j] + alpha * DeltaWeight[k].elements[0][j];
             Weights[k].elements[0][j] += DeltaWeight[k].elements[0][j];
@@ -193,8 +191,8 @@ void train(Settings settings) {
             computeError(settings, p);
             backPropagate(settings, p);
         }
-//        if (epoch % 100 == 0)
-//            printf("\nEpoch %-5d :   Error = %2.9Lf", epoch, Error);
+        if (epoch % 100 == 0)
+            printf("\nEpoch %-5d :   Error = %2.9Lf", epoch, Error);
         if (Error < 0.0004)
             break;
     }
@@ -206,12 +204,12 @@ NetworkType& Array::operator[](int index) {
 
 int main() {
     int config[] = { 2, 2, 2, 1 };
-    numberOfLayers = sizeof(config) / sizeof(int);
-    numberOfWeights = numberOfLayers - 1;
 
     Settings settings;
-    allocateMatrix(&settings.configuration, numberOfLayers, 0);
-    for (auto i = 0; i < numberOfLayers; i++) {
+    settings.numberOfLayers = sizeof(config) / sizeof(int);
+    settings.numberOfWeights = settings.numberOfLayers - 1;
+    allocateMatrix(&settings.configuration, settings.numberOfLayers, 0);
+    for (auto i = 0; i < settings.numberOfLayers; i++) {
         settings.configuration[i] = config[i];
     }
     settings.NumPattern = 4;
@@ -219,7 +217,7 @@ int main() {
     initialize(settings);
     train(settings);
     output(settings);
-    shutDown();
+    shutDown(settings);
     printf("\n\nGoodbye!\n\n");
     return 1;
 }

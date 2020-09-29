@@ -1,9 +1,10 @@
-/*
- * Util.cpp
- *
- *  Created on: Sep 28, 2020
- *      Author: wade4
- */
+//============================================================================
+// Name        : util.cpp
+// Author      : Christopher D. Wade
+// Version     : 1.0
+// Copyright   : (c) 2020 Christopher D. Wade
+// Description : Multihidden layer backpropagation net
+//============================================================================
 #include"nn.h"
 
 long allocateMatrix(NetworkTypePtrPtr *matrix, int size1, int size2, double low, double high) {
