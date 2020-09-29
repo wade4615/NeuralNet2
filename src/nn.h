@@ -61,17 +61,45 @@ typedef struct Settings {
         Matrix trainingOutput;
 } Settings, *SettingsPtr, **SettingsPtrPtr;
 
-NetworkType fRand(NetworkType fMin, NetworkType fMax);
-
-long allocateMatrix(NetworkTypePtrPtr *matrix, int size1, int size2, double low, double high);
-long allocateMatrix(NetworkTypePtrPtr *matrix, int size1, int size2, double value);
-void allocateMatrix(MatrixPtr matrix, int size1, int size2, double low, double high);
-void allocateMatrix(MatrixPtr matrix, int size1, int size2, double value);
-void allocateMatrix(ArrayPtr matrix, int size1, double value);
-long allocateMatrix(NetworkTypePtr *matrix, int size1, double value);
-void deallocate(NetworkTypePtrPtr *matrix, int size);
-void deallocate(NetworkTypePtr *matrix);
-void deallocate(MatrixPtr matrix);
-void deallocate(ArrayPtr matrix);
-
+class NeuralNetwork {
+        int epoch;
+        long memory;
+        long double Error;
+        NetworkType eta;
+        NetworkType alpha;
+        chrono::steady_clock::time_point tbegin;
+        chrono::steady_clock::time_point tend;
+        MatrixPtr Layers;
+        MatrixPtr Weights;
+        Matrix Expected;
+        ArrayPtr Delta;
+        MatrixPtr DeltaWeight;
+        MatrixPtr outputLayer;
+        SettingsPtr settings;
+    public:
+        NeuralNetwork(const int numPatterns, MatrixPtr in, MatrixPtr out, int config[], int size);
+        virtual ~NeuralNetwork();
+        void train();
+        void output();
+    protected:
+        double sigmoid(double x);
+        double sigmoidDerivative(double x);
+        void shutDown();
+        void randomizeInput();
+        void forward(int p);
+        void computeError(int p);
+        void backPropagate(int p);
+    private:
+        NetworkType fRand(NetworkType fMin, NetworkType fMax);
+        long allocateMatrix(NetworkTypePtrPtr *matrix, int size1, int size2, double low, double high);
+        long allocateMatrix(NetworkTypePtrPtr *matrix, int size1, int size2, double value);
+        void allocateMatrix(MatrixPtr matrix, int size1, int size2, double low, double high);
+        void allocateMatrix(MatrixPtr matrix, int size1, int size2, double value);
+        void allocateMatrix(ArrayPtr matrix, int size1, double value);
+        long allocateMatrix(NetworkTypePtr *matrix, int size1, double value);
+        void deallocate(NetworkTypePtrPtr *matrix, int size);
+        void deallocate(NetworkTypePtr *matrix);
+        void deallocate(MatrixPtr matrix);
+        void deallocate(ArrayPtr matrix);
+};
 #endif /* NN_H_ */
